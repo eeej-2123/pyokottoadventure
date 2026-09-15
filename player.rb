@@ -1,7 +1,14 @@
 class Player
     def initialize(window)
-        @image = Gosu::Image.new(window, "media/Starfighter.bmp", false)
+        @image = Array.new(4)
+        @image[0] = Gosu::Image.new("media/usagi1.png")
+        @image[1] = Gosu::Image.new("media/usagi2.png")
+        @image[2] = Gosu::Image.new("media/usagi3.png")
+        @image[3] = Gosu::Image.new("media/usagi4.png")
         @x = @y = @vel_x = @vel_y = @angle = 0.0
+        @image_index = 0
+        @image_wait = 0
+        @image_angle = 1
         @score = 0
     end
 
@@ -10,11 +17,13 @@ class Player
     end
 
     def move_left #左移動
-        @vel_x = -5
+        @vel_x = -3
+        @image_angle = -1
     end
 
     def move_right #右移動
-        @vel_x = 5
+        @vel_x = 3
+        @image_angle = 1
     end
 
     def move_up #上移動
@@ -33,13 +42,25 @@ class Player
     def move
         @x += @vel_x
         @y += @vel_y
+        @image_wait += 1
 
-        @vel_x *= 0.95
+        if @image_index == 3
+            @image_index = 0
+        end
+
+        if @vel_x != 0 && @image_wait > 8
+            @image_index += 1
+            @image_wait = 0
+        elsif @vel_x == 0
+            @image_index = 3
+        end
+
+        @vel_x = 0
         @vel_y *= 0.95
     end
 
     def draw
-        @image.draw(@x, @y, 1)
+        @image[@image_index].draw(@x, @y, 1, @image_angle, 1)
     end
 
 end
