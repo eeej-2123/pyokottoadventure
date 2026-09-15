@@ -9,7 +9,7 @@ class GameWindow < Gosu::Window
     @image = Gosu::Image.new("media/Space.png")
     @player = Player.new(self)
 
-    @player.warp(320, 240)
+    @player.warp(20, 240)
   end
 
   def update
