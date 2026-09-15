@@ -4,6 +4,9 @@ class Back
         @x = @y = 0.0
         @xmax = 59
         @ymax = 9
+
+        input_back    # マップとタイル画像はinitializeで一度だけ読み込む
+        input_tiles
     end
 
     def input_back #背景配置の読み込み
@@ -22,27 +25,24 @@ class Back
         }
     end
 
-    def check_tile(x, y) #タイルの判定
+    def check_tile(x, y) #タイルの判定(x, yはピクセル座標)
         tile_x = (x / 50).to_i
         tile_y = (y / 50).to_i
-        if tile_x < 0 || tile_x >= @xmax || tile_y < 0 || tile_y >= @ymax
-            return nil
-        end
-        @map[tile_y][tile_x]
+
+        return nil if tile_y < 0 || tile_y >= @map.length
+        return nil if tile_x < 0 || tile_x >= @map[tile_y].length
+
+        return @map[tile_y][tile_x]
     end
-    
 
     def draw(x, y) #背景の描画
-        input_back
-        input_tiles
         @image.draw(x, y, -1)
         @map.each_with_index do |row, i|
             row.each_with_index do |tile_num, j|
-                @tile = @tiles[tile_num]
-                next if @tile.nil?  # 対応する画像がなければスキップ
-                @tile.draw(x+j * 50, y+i * 50-20, 1)
+                tile = @tiles[tile_num]
+                next if tile.nil?
+                tile.draw(x + j * 50, y + i * 50 - 20, 1)
             end
         end
     end
-
 end

@@ -21,6 +21,7 @@ class GameWindow < Gosu::Window
     end
     # Game logic goes here
     @player.down
+    @player.check_ceiling
     @player.move
   end
 
