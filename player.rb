@@ -3,10 +3,10 @@ require_relative 'back'
 class Player
     def initialize(window)
         @image = Array.new(4)
-        @image[0] = Gosu::Image.new("media/usagi1.png")
-        @image[1] = Gosu::Image.new("media/usagi2.png")
-        @image[2] = Gosu::Image.new("media/usagi3.png")
-        @image[3] = Gosu::Image.new("media/usagi4.png")
+        @image[0] = Gosu::Image.new("media/usagi/usagi1.png")
+        @image[1] = Gosu::Image.new("media/usagi/usagi2.png")
+        @image[2] = Gosu::Image.new("media/usagi/usagi3.png")
+        @image[3] = Gosu::Image.new("media/usagi/usagi4.png")
         @x = @y = @vel_x = @vel_y = 0.0
         @bx = 0.0
         @image_index = 0
