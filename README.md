@@ -1,2 +1,2 @@
-# pyokottoadventure
+# ピョコっとアドベンチャー
 マリオ風ゲーム
