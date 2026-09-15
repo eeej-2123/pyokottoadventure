@@ -21,12 +21,12 @@ class Player
     end
 
     def move_left #左移動
-        @vel_x = -3
+        @vel_x = -5
         @image_angle = -1
     end
 
     def move_right #右移動
-        @vel_x = 3
+        @vel_x = 5
         @image_angle = 1
     end
 
@@ -44,7 +44,7 @@ class Player
     end
 
     def move
-        if @bx==0 && @x <= 320
+        if @bx==0 && @x <= 320 || @bx== -59*50+640 && @x >= 310
             @x += @vel_x
         else
             @bx -= @vel_x
@@ -58,7 +58,9 @@ class Player
             @image_index = 0
         end
 
-        if @vel_x != 0 && @image_wait > 6
+        if @vel_y != 0
+            @image_index = 2
+        elsif @vel_x != 0 && @image_wait > 6
             @image_index += 1
             @image_wait = 0
         elsif @vel_x == 0
