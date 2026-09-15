@@ -6,7 +6,7 @@ class GameWindow < Gosu::Window
     super 640, 480
     self.caption = "ピョコっとアドベンチャー"
 
-    @image = Gosu::Image.new("media/Space.png")
+    #@image = Gosu::Image.new("media/Space.png")
     @player = Player.new(self)
 
     @player.warp(20, 240)
@@ -35,7 +35,7 @@ class GameWindow < Gosu::Window
   end
 
   def draw
-    @image.draw(0, 0, 0)
+    #@image.draw(0, 0, 0)
     @player.draw
     # Drawing code goes here
   end

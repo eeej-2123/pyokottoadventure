@@ -1,3 +1,5 @@
+require_relative 'back'
+
 class Player
     def initialize(window)
         @image = Array.new(4)
@@ -5,11 +7,13 @@ class Player
         @image[1] = Gosu::Image.new("media/usagi2.png")
         @image[2] = Gosu::Image.new("media/usagi3.png")
         @image[3] = Gosu::Image.new("media/usagi4.png")
-        @x = @y = @vel_x = @vel_y = @angle = 0.0
+        @x = @y = @vel_x = @vel_y = 0.0
+        @bx = 0.0
         @image_index = 0
         @image_wait = 0
         @image_angle = 1
         @score = 0
+        @back = Back.new(self)
     end
 
     def warp(x, y)
@@ -40,7 +44,13 @@ class Player
     end
 
     def move
-        @x += @vel_x
+        if @bx==0 && @x <= 320
+            @x += @vel_x
+        else
+            @bx -= @vel_x
+            @x=320
+        end
+        
         @y += @vel_y
         @image_wait += 1
 
@@ -48,7 +58,7 @@ class Player
             @image_index = 0
         end
 
-        if @vel_x != 0 && @image_wait > 8
+        if @vel_x != 0 && @image_wait > 6
             @image_index += 1
             @image_wait = 0
         elsif @vel_x == 0
@@ -61,6 +71,7 @@ class Player
 
     def draw
         @image[@image_index].draw(@x, @y, 1, @image_angle, 1)
+        @back.draw(@bx, 0)
     end
 
 end
