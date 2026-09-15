@@ -35,10 +35,11 @@ class Player
     end
 
     def down #下移動
-        if @y < 350
+
+        if @y < 280
         @vel_y += 1
         end
-        if @y >= 350 && @vel_y > 0
+        if @y >= 280 && @vel_y > 0
         @vel_y = 0
         end
     end

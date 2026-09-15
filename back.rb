@@ -22,6 +22,16 @@ class Back
         }
     end
 
+    def check_tile(x, y) #タイルの判定
+        tile_x = (x / 50).to_i
+        tile_y = (y / 50).to_i
+        if tile_x < 0 || tile_x >= @xmax || tile_y < 0 || tile_y >= @ymax
+            return nil
+        end
+        @map[tile_y][tile_x]
+    end
+    
+
     def draw(x, y) #背景の描画
         input_back
         input_tiles
@@ -30,7 +40,7 @@ class Back
             row.each_with_index do |tile_num, j|
                 @tile = @tiles[tile_num]
                 next if @tile.nil?  # 対応する画像がなければスキップ
-                @tile.draw(x+j * 50, y+i * 50, 1)
+                @tile.draw(x+j * 50, y+i * 50-20, 1)
             end
         end
     end
