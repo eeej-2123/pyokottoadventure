@@ -44,7 +44,7 @@ class Player
     end
 
     def move
-        if @bx==0 && @x <= 320 || @bx== -59*50+640 && @x >= 310
+        if @bx==0 && @x <= 320 || @bx== -59 * 50 + 640 && @x >= 320
             @x += @vel_x
         else
             @bx -= @vel_x
