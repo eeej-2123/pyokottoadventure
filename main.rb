@@ -10,6 +10,7 @@ class GameWindow < Gosu::Window
     @player = Player.new(self)
 
     @player.warp(20, 240)
+    @up_pressed = 0
   end
 
   def update
@@ -27,9 +28,9 @@ class GameWindow < Gosu::Window
 
   def button_down(id)
     if id == Gosu::KbUp
-        @player.move_up
+      @up_pressed = @player.move_up(@up_pressed)
     end
-
+    
     if id == Gosu::KbEscape
         close
     end

@@ -1,4 +1,5 @@
 require_relative 'back'
+require_relative 'clear'
 
 class Player
     def initialize(window)
@@ -14,6 +15,7 @@ class Player
         @image_angle = 1
         @score = 0
         @back = Back.new(self)
+        @clear = Clear.new(self)
     end
 
     def warp(x, y)
@@ -63,8 +65,15 @@ def move_right #右移動
     end
 end
 
-def move_up #上移動(ジャンプ開始)
-    @vel_y = -20
+def move_up(pressed) #上移動(ジャンプ開始)
+     if @vel_y == 0
+        pressed = 0
+    end
+    if pressed < 2
+        @vel_y = -20
+        pressed += 1
+    end
+    return pressed
 end
 
 def check_ceiling #天井の当たり判定(毎フレーム呼ぶ)
@@ -138,6 +147,8 @@ end
             @image[@image_index].draw(@x, @y, 1, @image_angle, 1)
         end
         @back.draw(@bx, 0)
+        @clear.draw(@bx, 0)
+        @clear.check_clear(@x - @bx, @y)
     end
 
 end
