@@ -1,6 +1,6 @@
 class Clear
     def initialize(window)
-        @goal = Gosu::Image.new("media/ninjin.png")
+        @goal = Gosu::Image.new("media/clear/ninjin.png")
         @x = 57.5*50
         @y = 4*50
         @isCleared = false
