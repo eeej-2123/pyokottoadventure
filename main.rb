@@ -36,7 +36,6 @@ class GameWindow < Gosu::Window
   end
 
   def draw
-    #@image.draw(0, 0, 0)
     @player.draw
     # Drawing code goes here
   end

@@ -37,6 +37,10 @@ class Player
         @vel_x = -5
         @image_angle = -1
     end
+
+    if @x==5
+        @vel_x=0
+    end
 end
 
 def move_right #右移動
@@ -52,6 +56,10 @@ def move_right #右移動
     unless @blocked
         @vel_x = 5
         @image_angle = 1
+    end
+
+    if @x==640-50
+        @vel_x=0
     end
 end
 
@@ -95,13 +103,14 @@ end
     end
 
     def move
+
         if @bx==0 && @x <= 320 || @bx== -59*50+640 && @x >= 310
             @x += @vel_x
         else
             @bx -= @vel_x
             @x=320
         end
-        
+
         @y += @vel_y
         @image_wait += 1
 

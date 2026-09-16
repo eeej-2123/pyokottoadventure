@@ -1,6 +1,6 @@
 class Back
     def initialize(window)
-        @image = Gosu::Image.new("media/Space.png")
+        @image = Gosu::Image.new("media/Sora.png")
         @x = @y = 0.0
         @xmax = 59
         @ymax = 9
@@ -36,7 +36,7 @@ class Back
     end
 
     def draw(x, y) #背景の描画
-        @image.draw(x, y, -1)
+        @image.draw(0, 0, -1)
         @map.each_with_index do |row, i|
             row.each_with_index do |tile_num, j|
                 tile = @tiles[tile_num]
