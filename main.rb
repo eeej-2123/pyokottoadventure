@@ -21,6 +21,7 @@ class GameWindow < Gosu::Window
     end
     # Game logic goes here
     @player.down
+    @player.check_ceiling
     @player.move
   end
 
@@ -35,7 +36,6 @@ class GameWindow < Gosu::Window
   end
 
   def draw
-    #@image.draw(0, 0, 0)
     @player.draw
     # Drawing code goes here
   end
