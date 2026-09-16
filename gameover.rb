@@ -4,9 +4,9 @@ class Gameover
 
     def gameover(x, y) #ゲームオーバーの判定(x, yはピクセル座標)
         if y >= 480
-            @x = 0
-            @y = 0
+            return true
         end
+        return false
     end
 
     def draw(x, y) #ゲームオーバーの描画

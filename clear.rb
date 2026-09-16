@@ -10,6 +10,7 @@ class Clear
         if (x+50 >= @x && x <= @x+50) && (y+50 >= @y && y <= @y+50)
             @isCleared = true
         end 
+        return @isCleared
     end
 
     def draw(x, y) #ゴールの描画
