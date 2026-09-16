@@ -1,5 +1,7 @@
 require 'gosu'
 require_relative 'player'
+require_relative 'gameover'
+require_relative 'clear'
 
 class GameWindow < Gosu::Window
   def initialize
@@ -8,6 +10,8 @@ class GameWindow < Gosu::Window
 
     #@image = Gosu::Image.new("media/Space.png")
     @player = Player.new(self)
+    @gameover = Gameover.new(self)
+    @clear = Clear.new(self)
 
     @player.warp(20, 240)
     @up_pressed = 0
@@ -24,6 +28,16 @@ class GameWindow < Gosu::Window
     @player.down
     @player.check_ceiling
     @player.move
+
+    if @gameover.gameover(@player.get_x, @player.get_y)
+      @player.warp(20, 240)
+      @player.set_back
+    end
+
+    if @clear.check_clear(@player.get_x - @player.get_back, @player.get_y)
+      
+    end
+
   end
 
   def button_down(id)
@@ -38,6 +52,7 @@ class GameWindow < Gosu::Window
 
   def draw
     @player.draw
+    @clear.draw(@player.get_back, 0)
     # Drawing code goes here
   end
 end

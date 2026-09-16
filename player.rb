@@ -1,5 +1,4 @@
 require_relative 'back'
-require_relative 'clear'
 
 class Player
     def initialize(window)
@@ -15,7 +14,22 @@ class Player
         @image_angle = 1
         @score = 0
         @back = Back.new(self)
-        @clear = Clear.new(self)
+    end
+
+    def get_x
+        return @x
+    end
+
+    def get_y
+        return @y
+    end
+
+    def get_back
+        return @bx
+    end
+
+    def set_back
+        @bx=0
     end
 
     def warp(x, y)
@@ -147,8 +161,5 @@ end
             @image[@image_index].draw(@x, @y, 1, @image_angle, 1)
         end
         @back.draw(@bx, 0)
-        @clear.draw(@bx, 0)
-        @clear.check_clear(@x - @bx, @y)
     end
-
 end
