@@ -34,6 +34,10 @@ class Player
         return @life
     end
 
+    def get_vel_y
+    @vel_y
+    end
+
     def set_back
         @bx=0
     end
@@ -45,73 +49,77 @@ class Player
     CHAR_WIDTH = 50   # キャラクターの幅(実際の画像サイズに合わせて調整)
     CHAR_HEIGHT = 50  # キャラクターの高さ(実際の画像サイズに合わせて調整)
 
+    def bounce
+        @vel_y = -10
+    end
+
     def move_left #左移動
-    @check_x = @x - @bx + 1        # 左端のさらに1px先
-    @top_y    = @y
-    @bottom_y = @y + CHAR_HEIGHT - 15
+        @check_x = @x - @bx + 1        # 左端のさらに1px先
+        @top_y    = @y
+        @bottom_y = @y + CHAR_HEIGHT - 15
 
-    @tile_top    = @back.check_tile(@check_x, @top_y)
-    @tile_bottom = @back.check_tile(@check_x, @bottom_y)
+        @tile_top    = @back.check_tile(@check_x, @top_y)
+        @tile_bottom = @back.check_tile(@check_x, @bottom_y)
 
-    @blocked = (!@tile_top.nil? && @tile_top != 0) || (!@tile_bottom.nil? && @tile_bottom != 0)
+        @blocked = (!@tile_top.nil? && @tile_top != 0) || (!@tile_bottom.nil? && @tile_bottom != 0)
 
-    unless @blocked
-        @vel_x = -5
-        @image_angle = -1
+        unless @blocked
+            @vel_x = -5
+            @image_angle = -1
+        end
+
+        if @x==5
+            @vel_x=0
+        end
     end
 
-    if @x==5
-        @vel_x=0
+    def move_right #右移動
+        @check_x = @x - @bx + CHAR_WIDTH + 1   # 右端のさらに1px先
+        @top_y    = @y
+        @bottom_y = @y + CHAR_HEIGHT - 15
+
+        @tile_top    = @back.check_tile(@check_x, @top_y)
+        @tile_bottom = @back.check_tile(@check_x, @bottom_y)
+
+        @blocked = (!@tile_top.nil? && @tile_top != 0) || (!@tile_bottom.nil? && @tile_bottom != 0)
+
+        unless @blocked
+            @vel_x = 5
+            @image_angle = 1
+        end
+
+        if @x==640-50
+            @vel_x=0
+        end
     end
-end
 
-def move_right #右移動
-    @check_x = @x - @bx + CHAR_WIDTH + 1   # 右端のさらに1px先
-    @top_y    = @y
-    @bottom_y = @y + CHAR_HEIGHT - 15
-
-    @tile_top    = @back.check_tile(@check_x, @top_y)
-    @tile_bottom = @back.check_tile(@check_x, @bottom_y)
-
-    @blocked = (!@tile_top.nil? && @tile_top != 0) || (!@tile_bottom.nil? && @tile_bottom != 0)
-
-    unless @blocked
-        @vel_x = 5
-        @image_angle = 1
+    def move_up(pressed) #上移動(ジャンプ開始)
+        if @vel_y == 0
+            pressed = 0
+        end
+        if pressed < 2
+            @vel_y = -20
+            pressed += 1
+        end
+        return pressed
     end
 
-    if @x==640-50
-        @vel_x=0
+    def check_ceiling #天井の当たり判定(毎フレーム呼ぶ)
+        return unless @vel_y < 0   # 上昇中でなければ何もしない
+
+        @check_y = @y - 1
+        @left_x  = @x - @bx
+        @right_x = @x - @bx + CHAR_WIDTH - 1
+
+        @tile_left  = @back.check_tile(@left_x,  @check_y)
+        @tile_right = @back.check_tile(@right_x, @check_y)
+
+        @blocked = (!@tile_left.nil? && @tile_left != 0) || (!@tile_right.nil? && @tile_right != 0)
+
+        if @blocked
+            @vel_y = 0   # ぶつかったら上昇を止める(すぐ落下に転じる)
+        end
     end
-end
-
-def move_up(pressed) #上移動(ジャンプ開始)
-     if @vel_y == 0
-        pressed = 0
-    end
-    if pressed < 2
-        @vel_y = -20
-        pressed += 1
-    end
-    return pressed
-end
-
-def check_ceiling #天井の当たり判定(毎フレーム呼ぶ)
-    return unless @vel_y < 0   # 上昇中でなければ何もしない
-
-    @check_y = @y - 1
-    @left_x  = @x - @bx
-    @right_x = @x - @bx + CHAR_WIDTH - 1
-
-    @tile_left  = @back.check_tile(@left_x,  @check_y)
-    @tile_right = @back.check_tile(@right_x, @check_y)
-
-    @blocked = (!@tile_left.nil? && @tile_left != 0) || (!@tile_right.nil? && @tile_right != 0)
-
-    if @blocked
-        @vel_y = 0   # ぶつかったら上昇を止める(すぐ落下に転じる)
-    end
-end
 
     def down #下移動
         @foot_y = @y + 70          # 足元のY座標
