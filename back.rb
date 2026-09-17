@@ -1,6 +1,6 @@
 class Back
     def initialize(window)
-        @image = Gosu::Image.new("media/Sora.png")
+        @image = Gosu::Image.new("media/back/Sora.png")
         @x = @y = 0.0
         @xmax = 59
         @ymax = 9
