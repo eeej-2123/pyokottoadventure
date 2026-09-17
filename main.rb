@@ -4,6 +4,7 @@ require_relative 'gameover'
 require_relative 'clear'
 require_relative 'start'
 require_relative 'enemy'
+require_relative 'back'
 
 class GameWindow < Gosu::Window
   def initialize
@@ -15,7 +16,7 @@ class GameWindow < Gosu::Window
     @gameover = Gameover.new(self)
     @clear = Clear.new(self)
     @start = Start.new(self)
-    @enemy = Enemy.new(self)
+    @enemy = Enemy.new(self, @player.get_back_obj)
 
     @scleen_num=0
     @player.warp(20, 240)
@@ -86,10 +87,11 @@ class GameWindow < Gosu::Window
   end
 
   def button_down(id)
-    if id == Gosu::KbUp
-      @up_pressed = @player.move_up(@up_pressed)
+    if @scleen_num==1
+      if id == Gosu::KbUp
+        @up_pressed = @player.move_up(@up_pressed)
+      end
     end
-    
     if id == Gosu::KbEscape
         close
     end

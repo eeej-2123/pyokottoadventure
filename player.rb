@@ -18,6 +18,10 @@ class Player
         @back = Back.new(self)
     end
 
+    def get_back_obj
+        @back
+    end
+
     def get_x
         return @x
     end
