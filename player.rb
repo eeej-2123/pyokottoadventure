@@ -30,6 +30,10 @@ class Player
         return @bx
     end
 
+    def get_life
+        return @life
+    end
+
     def set_back
         @bx=0
     end

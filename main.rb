@@ -18,6 +18,8 @@ class GameWindow < Gosu::Window
     @scleen_num=0
     @player.warp(20, 240)
     @up_pressed = 0
+    @outed = 0
+    @fleem = 0
   end
 
   def update
@@ -39,7 +41,7 @@ class GameWindow < Gosu::Window
       end
     end
 
-    if @scleen_num == 1
+    if @scleen_num == 1 && @outed == 0
       if button_down? Gosu::KbLeft or button_down? Gosu::GpLeft then
         @player.move_left
       end
@@ -55,6 +57,7 @@ class GameWindow < Gosu::Window
         @player.warp(20, 240)
         @player.set_back
         @player.down_life
+        @outed=1
       end
 
       if @clear.check_clear(@player.get_x - @player.get_back, @player.get_y)
@@ -81,10 +84,20 @@ class GameWindow < Gosu::Window
     end
 
     if @scleen_num == 1
-      @player.draw
-      @clear.draw(@player.get_back, 0)
-      # Drawing code goes here
+      if @outed == 1
+        @gameover.draw(@player.get_life)
+        @fleem += 1
+        if @fleem == 40
+          @outed = 0
+          @fleem = 0
+        end
+      else
+        @player.draw
+        @clear.draw(@player.get_back, 0)
+        # Drawing code goes here
+      end
     end
+
   end
 end
 
