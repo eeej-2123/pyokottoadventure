@@ -22,7 +22,21 @@ class GameWindow < Gosu::Window
 
   def update
     if @scleen_num == 0
-
+      if button_down? Gosu::KbLeft or button_down? Gosu::GpLeft then
+        @start.change_mode(0)
+      end
+      if button_down? Gosu::KbRight or button_down? Gosu::GpRight then
+        @start.change_mode(1)
+      end
+      if button_down? Gosu::KbUp then
+        @start.change_mode(2)
+      end
+      if button_down? Gosu::KbDown then
+        @start.change_mode(3)
+      end
+      if button_down? (Gosu::KB_RETURN) then
+        @scleen_num = @start.selected
+      end
     end
 
     if @scleen_num == 1
