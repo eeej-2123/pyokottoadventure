@@ -18,7 +18,8 @@ class GameWindow < Gosu::Window
     @scleen_num=0
     @player.warp(20, 240)
     @up_pressed = 0
-    @outed = 0
+    @outed = 1
+    @cleared = 0
     @fleem = 0
   end
 
@@ -60,8 +61,19 @@ class GameWindow < Gosu::Window
         @outed=1
       end
 
-      if @clear.check_clear(@player.get_x - @player.get_back, @player.get_y)
-      
+      if @clear.check_clear(@player.get_x - @player.get_back, @player.get_y) && @cleared==0
+        @cleared = 1
+      end
+
+      if @cleared == 1
+        @fleem+=1
+        if @fleem == 40
+          @cleared = 2
+          @fleem = 0
+          @player.warp(20, 240)
+          @player.set_back
+          @clear.reset
+        end
       end
     end
 
@@ -84,11 +96,12 @@ class GameWindow < Gosu::Window
     end
 
     if @scleen_num == 1
-      if @outed == 1
+      if @outed == 1 || @cleared == 2
         @gameover.draw(@player.get_life)
         @fleem += 1
-        if @fleem == 40
+        if @fleem == 50
           @outed = 0
+          @cleared = 0
           @fleem = 0
         end
       else

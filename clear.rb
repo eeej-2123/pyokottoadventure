@@ -6,6 +6,10 @@ class Clear
         @isCleared = false
     end
 
+    def reset
+        @isCleared = false
+    end
+
     def check_clear(x, y) #ゴールの判定(x, yはピクセル座標)
         if (x+50 >= @x && x <= @x+50) && (y+50 >= @y && y <= @y+50)
             @isCleared = true
