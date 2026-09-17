@@ -3,6 +3,7 @@ require_relative 'player'
 require_relative 'gameover'
 require_relative 'clear'
 require_relative 'start'
+require_relative 'enemy'
 
 class GameWindow < Gosu::Window
   def initialize
@@ -14,11 +15,13 @@ class GameWindow < Gosu::Window
     @gameover = Gameover.new(self)
     @clear = Clear.new(self)
     @start = Start.new(self)
+    @enemy = Enemy.new(self)
 
     @scleen_num=0
     @player.warp(20, 240)
-    @up_pressed = 0
+    @enemy.warp(18*50, 6*50-20)
     @outed = 1
+    @up_pressed = 0
     @cleared = 0
     @fleem = 0
   end
@@ -53,6 +56,7 @@ class GameWindow < Gosu::Window
       @player.down
       @player.check_ceiling
       @player.move
+      @enemy.move_enemy
 
       if @gameover.gameover(@player.get_x, @player.get_y)
         @player.warp(20, 240)
@@ -107,6 +111,7 @@ class GameWindow < Gosu::Window
       else
         @player.draw
         @clear.draw(@player.get_back, 0)
+        @enemy.draw(@player.get_back, 0)
         # Drawing code goes here
       end
     end
