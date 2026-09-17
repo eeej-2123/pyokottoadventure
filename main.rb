@@ -54,12 +54,15 @@ class GameWindow < Gosu::Window
       if @gameover.gameover(@player.get_x, @player.get_y)
         @player.warp(20, 240)
         @player.set_back
+        @player.down_life
       end
 
       if @clear.check_clear(@player.get_x - @player.get_back, @player.get_y)
       
       end
     end
+
+
   end
 
   def button_down(id)

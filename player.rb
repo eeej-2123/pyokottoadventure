@@ -7,12 +7,14 @@ class Player
         @image[1] = Gosu::Image.new("media/usagi/usagi2.png")
         @image[2] = Gosu::Image.new("media/usagi/usagi3.png")
         @image[3] = Gosu::Image.new("media/usagi/usagi4.png")
+        @heart=Gosu::Image.new("media/usagi/heart.png")
         @x = @y = @vel_x = @vel_y = 0.0
         @bx = 0.0
         @image_index = 0
         @image_wait = 0
         @image_angle = 1
         @score = 0
+        @life=3
         @back = Back.new(self)
     end
 
@@ -125,6 +127,10 @@ end
         end
     end
 
+    def down_life
+        @life -= 1
+    end
+
     def move
 
         if @bx==0 && @x <= 320 || @bx== -59*50+640 && @x >= 310
@@ -161,5 +167,9 @@ end
             @image[@image_index].draw(@x, @y, 1, @image_angle, 1)
         end
         @back.draw(@bx, 0)
+
+        for i in 0..@life - 1
+            @heart.draw(i * 80,0)
+        end
     end
 end
