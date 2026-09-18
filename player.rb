@@ -108,6 +108,32 @@ class Player
         return pressed
     end
 
+    # 上から触れると危険なタイル(足元に生えている棘など)
+    HAZARD_TOP = [7, 12]
+    # 下から触れると危険なタイル(天井に生えている棘など)
+    HAZARD_BOTTOM = [11, 13]
+
+    def check_hazard
+        left_x  = @x - @bx
+        right_x = @x - @bx + 40      # down と同じ基準に合わせる
+
+        # 足元(上から乗った)判定
+        foot_y = @y + 70             # down と同じ基準に合わせる
+        tile_left_foot  = @back.check_tile(left_x,  foot_y)
+        tile_right_foot = @back.check_tile(right_x, foot_y)
+
+        return true if HAZARD_TOP.include?(tile_left_foot) || HAZARD_TOP.include?(tile_right_foot)
+
+        # 頭上(下から触れた)判定
+        head_y = @y - 1
+        tile_left_head  = @back.check_tile(left_x,  head_y)
+        tile_right_head = @back.check_tile(right_x, head_y)
+
+        return true if HAZARD_BOTTOM.include?(tile_left_head) || HAZARD_BOTTOM.include?(tile_right_head)
+
+        false
+    end
+
     def check_ceiling #天井の当たり判定(毎フレーム呼ぶ)
         return unless @vel_y < 0   # 上昇中でなければ何もしない
 

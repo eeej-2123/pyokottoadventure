@@ -10,7 +10,7 @@ class Back
         @x = @y = 0.0
         @xmax = 59
         @ymax = 9
-        @stagemum = 1
+        @stagemum = 4
 
         input_back    # マップとタイル画像はinitializeで一度だけ読み込む
         input_tiles
@@ -109,7 +109,7 @@ class Back
                 row.each_with_index do |tile_num, j|
                     tile = @tiles[tile_num]
                     next if tile.nil?
-                    tile.draw(x + j * 50, y + i * 50 - 20, 1)
+                    tile.draw(x + j * 50, y + i * 50 - 20, 0)
                 end
             end
         elsif @stagemum == 2
@@ -117,7 +117,7 @@ class Back
                 row.each_with_index do |tile_num, j|
                     tile = @tiles[tile_num]
                     next if tile.nil?
-                    tile.draw(x + j * 50, y + i * 50 - 20, 1)
+                    tile.draw(x + j * 50, y + i * 50 - 20, 0)
                 end
             end
         elsif @stagemum == 3
@@ -125,7 +125,7 @@ class Back
                 row.each_with_index do |tile_num, j|
                     tile = @tiles[tile_num]
                     next if tile.nil?
-                    tile.draw(x + j * 50, y + i * 50 - 20, 1)
+                    tile.draw(x + j * 50, y + i * 50 - 20, 0)
                 end
             end
         elsif @stagemum == 4
@@ -133,7 +133,7 @@ class Back
                 row.each_with_index do |tile_num, j|
                     tile = @tiles[tile_num]
                     next if tile.nil?
-                    tile.draw(x + j * 50, y + i * 50 - 20, 1)
+                    tile.draw(x + j * 50, y + i * 50 - 20, 0)
                 end
             end
         #elsif @stagemum == 5
