@@ -17,7 +17,7 @@ class GameWindow < Gosu::Window
     @clear = Clear.new(self)
     @start = Start.new(self)
     @enemy = Enemy.new(self, @player.get_back_obj)
-    @back = Back.new(self)
+    @back = @player.get_back_obj
 
     @scleen_num=0
     @player.warp(20, 240)
@@ -155,7 +155,7 @@ end
 
     if @scleen_num == 1
       if @outed == 1 || @cleared == 2
-        @gameover.draw(@player.get_life)
+        @gameover.draw(@player.get_life, @back.get_stagemum)
         @fleem += 1
         if @fleem == 50
           @outed = 0
