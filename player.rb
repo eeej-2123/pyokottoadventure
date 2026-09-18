@@ -59,43 +59,49 @@ class Player
         @vel_y = -10
     end
 
-    def move_left #左移動
-        @check_x = @x - @bx + 1        # 左端のさらに1px先
-        @top_y    = @y
-        @bottom_y = @y + CHAR_HEIGHT - 15
-
-        @tile_top    = @back.check_tile(@check_x, @top_y)
-        @tile_bottom = @back.check_tile(@check_x, @bottom_y)
-
-        @blocked = (!@tile_top.nil? && @tile_top != 0) || (!@tile_bottom.nil? && @tile_bottom != 0)
-
-        unless @blocked
-            @vel_x = -5
-            @image_angle = -1
-        end
-
-        if @x==5
-            @vel_x=0
-        end
+   def move_left #左移動(速度をセットするだけ)
+        @vel_x = -5
+        @image_angle = -1
     end
 
-    def move_right #右移動
-        @check_x = @x - @bx + CHAR_WIDTH + 1   # 右端のさらに1px先
-        @top_y    = @y
-        @bottom_y = @y + CHAR_HEIGHT - 15
+    def move_right #右移動(速度をセットするだけ)
+        @vel_x = 5
+        @image_angle = 1
+    end
 
-        @tile_top    = @back.check_tile(@check_x, @top_y)
-        @tile_bottom = @back.check_tile(@check_x, @bottom_y)
+    def check_wall_x #横方向の壁判定(毎フレーム呼ぶ)
+        return if @vel_x == 0
 
-        @blocked = (!@tile_top.nil? && @tile_top != 0) || (!@tile_bottom.nil? && @tile_bottom != 0)
+        top_y    = @y + 2
+        bottom_y = @y + CHAR_HEIGHT - 15
 
-        unless @blocked
-            @vel_x = 5
-            @image_angle = 1
-        end
+        if @vel_x < 0
+            check_x = @x - @bx + @vel_x   # 移動予定先(左方向)
 
-        if @x==640-50
-            @vel_x=0
+            tile_top    = @back.check_tile(check_x, top_y)
+            tile_bottom = @back.check_tile(check_x, bottom_y)
+
+            blocked = (!tile_top.nil? && tile_top != 0) || (!tile_bottom.nil? && tile_bottom != 0)
+
+            if blocked
+                tile_x = (check_x / 50).to_i
+                @x = (tile_x + 1) * 50 + @bx  # 壁の右端に吸着
+                @vel_x = 0
+            end
+
+        elsif @vel_x > 0
+            check_x = @x - @bx + CHAR_WIDTH + @vel_x   # 移動予定先(右方向)
+
+            tile_top    = @back.check_tile(check_x, top_y)
+            tile_bottom = @back.check_tile(check_x, bottom_y)
+
+            blocked = (!tile_top.nil? && tile_top != 0) || (!tile_bottom.nil? && tile_bottom != 0)
+
+            if blocked
+                tile_x = (check_x / 50).to_i
+                @x = tile_x * 50 - CHAR_WIDTH + @bx  # 壁の左端に吸着
+                @vel_x = 0
+            end
         end
     end
 
@@ -216,7 +222,21 @@ class Player
             @image_index = 3
         end
 
-        @vel_x = 0
+        if @back.get_stagemum==4
+            @vel_x*=0.95
+            if @image_angle == 1
+                if @vel_x < 0.01
+                    @vel_x = 0
+                end
+            end
+            if @image_angle == -1
+                if @vel_x > -0.01
+                    @vel_x = 0
+                end
+            end
+        else
+            @vel_x = 0
+        end
         @vel_y *= 0.95
     end
 

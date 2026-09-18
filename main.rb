@@ -55,12 +55,13 @@ class GameWindow < Gosu::Window
       # Game logic goes here
       @player.down
       @player.check_ceiling
+      @player.check_wall_x
       @player.move
       @enemy.move_enemy
       #check_enemy_collision
 
       if @back.get_stagemum==3
-        if@player.passed_x?(50*39) && @traped==0
+        if@player.passed_x?(50*40) && @traped==0
           @traped=1
           @back.change_tile
         end
