@@ -46,58 +46,69 @@ class GameWindow < Gosu::Window
     end
 
     if @scleen_num == 1 && @outed == 0
-      if button_down? Gosu::KbLeft or button_down? Gosu::GpLeft then
-        @player.move_left
-      end
-      if button_down? Gosu::KbRight or button_down? Gosu::GpRight then
-        @player.move_right
-      end
-      # Game logic goes here
-      @player.down
-      @player.check_ceiling
-      @player.move
-      @enemy.move_enemy
-      #check_enemy_collision
 
-      if @back.get_stagemum==3
-        if@player.passed_x?(50*39) && @traped==0
-          @traped=1
-          @back.change_tile
-        end
-        if @player.passed_x?(50*49+25) && @player.get_vel_y == 0
-          @player.trap_up
-        end
-      end
+      if @player.dying?
+        # 死亡演出中:通常操作・当たり判定はせず、落下だけ進める
+        @player.update_dying
 
-      if @player.check_hazard
-        @player.warp(20, 240)
-        @player.set_back
-        @player.down_life
-        @outed = 1
-      end
-
-      if @gameover.gameover(@player.get_x, @player.get_y)
-        @player.warp(20, 240)
-        @player.set_back
-        @player.down_life
-        @outed=1
-      end
-
-      if @clear.check_clear(@player.get_x - @player.get_back, @player.get_y) && @cleared==0
-        @cleared = 1
-      end
-
-      if @cleared == 1
-        @fleem+=1
-        if @fleem == 40
-          if !@back.change_stage
-            continue
-          end
-          @cleared = 2
-          @fleem = 0
+        if @player.dying_finished?
+          @player.end_dying
           @player.warp(20, 240)
           @player.set_back
-          @clear.reset
+          @outed = 1
+        end
+
+      else
+        # 通常時の処理(今まで通り)
+        if button_down? Gosu::KbLeft or button_down? Gosu::GpLeft then
+          @player.move_left
+        end
+        if button_down? Gosu::KbRight or button_down? Gosu::GpRight then
+          @player.move_right
+        end
+
+        @player.down
+        @player.check_ceiling
+        @player.check_wall_x
+        @player.move
+        @enemy.move_enemy
+
+        if @back.get_stagemum==3
+          if @player.passed_x?(50*40) && @traped==0
+            @traped=1
+            @back.change_tile
+          end
+          if @player.passed_x?(50*49+25) && @player.get_vel_y == 0
+            @player.trap_up
+          end
+        end
+
+        if @player.check_hazard
+          @player.down_life
+          @player.die          # ← 即warpではなく死亡演出を開始
+        end
+
+        if @gameover.gameover(@player.get_x, @player.get_y)
+          @player.down_life
+          @player.die          # ← 同上
+        end
+
+        if @clear.check_clear(@player.get_x - @player.get_back, @player.get_y) && @cleared==0
+          @cleared = 1
+        end
+
+        if @cleared == 1
+          @fleem+=1
+          if @fleem == 40
+            if !@back.change_stage
+              continue
+            end
+            @cleared = 2
+            @fleem = 0
+            @player.warp(20, 240)
+            @player.set_back
+            @clear.reset
+          end
         end
       end
     end
@@ -106,31 +117,30 @@ class GameWindow < Gosu::Window
     if @scleen_num == 3
     end
 
-
   end
 
   def button_down(id)
-  if @scleen_num == 0
-    if id == Gosu::KB_RETURN
-      @scleen_num = @start.selected
+    if @scleen_num == 0
+      if id == Gosu::KB_RETURN
+        @scleen_num = @start.selected
+      end
+    elsif @scleen_num == 1
+      if id == Gosu::KbUp
+        @up_pressed = @player.move_up(@up_pressed)
+      end
+    elsif @scleen_num == 2
+      if id == Gosu::KB_RETURN
+        @scleen_num = 0
+      end
+    elsif @scleen_num == 3
+      if id == Gosu::KB_RETURN
+        @scleen_num = 0
+      end
     end
-  elsif @scleen_num == 1
-    if id == Gosu::KbUp
-      @up_pressed = @player.move_up(@up_pressed)
-    end
-  elsif @scleen_num == 2
-    if id == Gosu::KB_RETURN
-      @scleen_num = 0
-    end
-  elsif @scleen_num == 3
-    if id == Gosu::KB_RETURN
-      @scleen_num = 0
+    if id == Gosu::KbEscape
+      close
     end
   end
-  if id == Gosu::KbEscape
-    close
-  end
-end
 
   def check_enemy_collision
     return unless @enemy.alive?
