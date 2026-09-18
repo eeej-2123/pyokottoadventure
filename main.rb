@@ -41,9 +41,6 @@ class GameWindow < Gosu::Window
       if button_down? Gosu::KbDown then
         @start.change_mode(3)
       end
-      if button_down? (Gosu::KB_RETURN) then
-        @scleen_num = @start.selected
-      end
     end
 
     if @scleen_num == 1 && @outed == 0
@@ -82,20 +79,36 @@ class GameWindow < Gosu::Window
         end
       end
     end
+    if @scleen_num == 2
+    end
+    if @scleen_num == 3
+    end
 
 
   end
 
   def button_down(id)
-    if @scleen_num==1
-      if id == Gosu::KbUp
-        @up_pressed = @player.move_up(@up_pressed)
-      end
+  if @scleen_num == 0
+    if id == Gosu::KB_RETURN
+      @scleen_num = @start.selected
     end
-    if id == Gosu::KbEscape
-        close
+  elsif @scleen_num == 1
+    if id == Gosu::KbUp
+      @up_pressed = @player.move_up(@up_pressed)
+    end
+  elsif @scleen_num == 2
+    if id == Gosu::KB_RETURN
+      @scleen_num = 0
+    end
+  elsif @scleen_num == 3
+    if id == Gosu::KB_RETURN
+      @scleen_num = 0
     end
   end
+  if id == Gosu::KbEscape
+    close
+  end
+end
 
   def check_enemy_collision
     return unless @enemy.alive?
@@ -151,6 +164,12 @@ class GameWindow < Gosu::Window
         @enemy.draw(@player.get_back, 0)
         # Drawing code goes here
       end
+    end
+    if @scleen_num == 2
+      @start.draw_settei
+    end
+    if @scleen_num == 3
+      @start.draw_sousa
     end
   end
 end
