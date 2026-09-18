@@ -107,31 +107,30 @@ class GameWindow < Gosu::Window
     if @scleen_num == 3
     end
 
-
   end
 
   def button_down(id)
-  if @scleen_num == 0
-    if id == Gosu::KB_RETURN
-      @scleen_num = @start.selected
+    if @scleen_num == 0
+      if id == Gosu::KB_RETURN
+        @scleen_num = @start.selected
+      end
+    elsif @scleen_num == 1
+      if id == Gosu::KbUp
+        @up_pressed = @player.move_up(@up_pressed)
+      end
+    elsif @scleen_num == 2
+      if id == Gosu::KB_RETURN
+        @scleen_num = 0
+      end
+    elsif @scleen_num == 3
+      if id == Gosu::KB_RETURN
+        @scleen_num = 0
+      end
     end
-  elsif @scleen_num == 1
-    if id == Gosu::KbUp
-      @up_pressed = @player.move_up(@up_pressed)
-    end
-  elsif @scleen_num == 2
-    if id == Gosu::KB_RETURN
-      @scleen_num = 0
-    end
-  elsif @scleen_num == 3
-    if id == Gosu::KB_RETURN
-      @scleen_num = 0
+    if id == Gosu::KbEscape
+      close
     end
   end
-  if id == Gosu::KbEscape
-    close
-  end
-end
 
   def check_enemy_collision
     return unless @enemy.alive?

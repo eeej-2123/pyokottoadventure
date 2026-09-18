@@ -76,7 +76,7 @@ class Player
         bottom_y = @y + CHAR_HEIGHT - 15
 
         if @vel_x < 0
-            check_x = @x - @bx + @vel_x   # 移動予定先(左方向)
+            check_x = @x - @bx + @vel_x
 
             tile_top    = @back.check_tile(check_x, top_y)
             tile_bottom = @back.check_tile(check_x, bottom_y)
@@ -85,12 +85,12 @@ class Player
 
             if blocked
                 tile_x = (check_x / 50).to_i
-                @x = (tile_x + 1) * 50 + @bx  # 壁の右端に吸着
+                @x = (tile_x + 1) * 50 + @bx
                 @vel_x = 0
             end
 
         elsif @vel_x > 0
-            check_x = @x - @bx + CHAR_WIDTH + @vel_x   # 移動予定先(右方向)
+            check_x = @x - @bx + CHAR_WIDTH + @vel_x
 
             tile_top    = @back.check_tile(check_x, top_y)
             tile_bottom = @back.check_tile(check_x, bottom_y)
@@ -99,9 +99,18 @@ class Player
 
             if blocked
                 tile_x = (check_x / 50).to_i
-                @x = tile_x * 50 - CHAR_WIDTH + @bx  # 壁の左端に吸着
+                @x = tile_x * 50 - CHAR_WIDTH + @bx
                 @vel_x = 0
             end
+        end
+
+        # 画面端のチェック(タイルの壁判定とは別に、常に効かせる)
+        if @x + @vel_x <= 0
+            @x = 0
+            @vel_x = 0
+        elsif @x + @vel_x >= 640 - CHAR_WIDTH
+            @x = 640 - CHAR_WIDTH
+            @vel_x = 0
         end
     end
 
@@ -129,7 +138,6 @@ class Player
         elsif @image_angle == -1
             world_x == x
         end
-
     end
 
     # 上から触れると危険なタイル(足元に生えている棘など)
@@ -197,6 +205,9 @@ class Player
         @life -= 1
     end
 
+    STAGE_RIGHT_LIMIT = -59 * 50 + 640   # ステージ右端でのbxの値
+    STAGE_LEFT_LIMIT = 0
+    
     def move
 
         if @bx==0 && @x <= 320 || @bx== -59*50+640 && @x >= 310
@@ -204,6 +215,15 @@ class Player
         else
             @bx -= @vel_x
             @x=320
+        end
+
+        # ステージ右端を超えないようにガード
+        if @bx < STAGE_RIGHT_LIMIT
+            @bx = STAGE_RIGHT_LIMIT
+        end
+
+        if @bx > STAGE_LEFT_LIMIT
+            @bx = STAGE_LEFT_LIMIT
         end
 
         @y += @vel_y
