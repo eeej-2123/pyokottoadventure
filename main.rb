@@ -26,6 +26,7 @@ class GameWindow < Gosu::Window
     @up_pressed = 0
     @cleared = 0
     @fleem = 0
+    @traped = 0
   end
 
   def update
@@ -57,6 +58,16 @@ class GameWindow < Gosu::Window
       @player.move
       @enemy.move_enemy
       #check_enemy_collision
+
+      if @back.get_stagemum==3
+        if@player.passed_x?(50*39) && @traped==0
+          @traped=1
+          @back.change_tile
+        end
+        if @player.passed_x?(50*49+25) && @player.get_vel_y == 0
+          @player.trap_up
+        end
+      end
 
       if @player.check_hazard
         @player.warp(20, 240)

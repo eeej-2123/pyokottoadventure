@@ -39,7 +39,7 @@ class Player
     end
 
     def get_vel_y
-    @vel_y
+        @vel_y
     end
 
     def set_back
@@ -48,6 +48,8 @@ class Player
 
     def warp(x, y)
         @x, @y = x, y
+        @vel_x = @vel_y = 0.0
+        @image_angle = 1
     end
 
     CHAR_WIDTH = 50   # キャラクターの幅(実際の画像サイズに合わせて調整)
@@ -106,6 +108,22 @@ class Player
             pressed += 1
         end
         return pressed
+    end
+
+    def trap_up
+        @vel_y = -50
+    end
+
+    def passed_x?(x) # 進行方向の先端が指定x座標(ワールド座標)を通り過ぎたらtrue
+        world_x = @x - @bx   # スクロールを考慮したワールド座標
+
+        if @image_angle == 1 
+            # 右向き:右端が指定x座標を超えたら
+            world_x + CHAR_WIDTH == x
+        elsif @image_angle == -1
+            world_x == x
+        end
+
     end
 
     # 上から触れると危険なタイル(足元に生えている棘など)

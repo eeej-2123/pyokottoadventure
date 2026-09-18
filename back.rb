@@ -10,7 +10,7 @@ class Back
         @x = @y = 0.0
         @xmax = 59
         @ymax = 9
-        @stagemum = 4
+        @stagemum = 3
 
         input_back    # マップとタイル画像はinitializeで一度だけ読み込む
         input_tiles
@@ -20,6 +20,15 @@ class Back
         return @stagemum
     end
 
+    def change_tile
+        for i in 6..9
+            for j in 37..39
+                @map2[i][j] = @map2[i][j+5]
+                @map2[i][j+5] = 0
+            end
+        end
+    end
+    
     def input_back #背景配置の読み込み
         @map0 = File.readlines("media/map/1-1.txt").map do |line|
             line.split.map(&:to_i)
