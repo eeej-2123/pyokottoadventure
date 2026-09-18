@@ -10,7 +10,7 @@ class Back
         @x = @y = 0.0
         @xmax = 59
         @ymax = 9
-        @stagemum = 1
+        @stagemum = 5
 
         input_back    # マップとタイル画像はinitializeで一度だけ読み込む
         input_tiles
@@ -33,9 +33,9 @@ class Back
         @map3 = File.readlines("media/map/1-4.txt").map do |line|
             line.split.map(&:to_i)
         end
-        #@map4 = File.readlines("media/map/1-5.txt").map do |line|
-        #    line.split.map(&:to_i)
-        #end
+        @map4 = File.readlines("media/map/1-5.txt").map do |line|
+            line.split.map(&:to_i)
+        end
     end
 
     def change_stage
@@ -63,10 +63,10 @@ class Back
             11 => Gosu::Image.new("media/tiles1-3/under_toge.png"),
             12 => Gosu::Image.new("media/tiles1-4/ice_toge_up.png"),
             13 => Gosu::Image.new("media/tiles1-4/ice_toge_down.png"),
-            #14 => Gosu::Image.new("media/tiles1-5/hatena10.png"),
-            #15 => Gosu::Image.new("media/tiles1-5/hatena11.png"),
-            #16 => Gosu::Image.new("media/tiles1-5/hatena12.png"),
-            #17 => Gosu::Image.new("media/tiles1-5/hatena13.png"),
+            14 => Gosu::Image.new("media/tiles1-5/hatena10.png"),
+            15 => Gosu::Image.new("media/tiles1-5/hatena11.png"),
+            16 => Gosu::Image.new("media/tiles1-5/hatena12.png"),
+            17 => Gosu::Image.new("media/tiles1-5/hatena13.png"),
         }
     end
 
@@ -94,11 +94,11 @@ class Back
             return nil if tile_x < 0 || tile_x >= @map3[tile_y].length
 
             return @map3[tile_y][tile_x]
-        #elsif @stagemum == 5
-        #return nil if tile_y < 0 || tile_y >= @map4.length
-        #return nil if tile_x < 0 || tile_x >= @map4[tile_y].length
+        elsif @stagemum == 5
+            return nil if tile_y < 0 || tile_y >= @map4.length
+            return nil if tile_x < 0 || tile_x >= @map4[tile_y].length
 
-        #return @map4[tile_y][tile_x]
+            return @map4[tile_y][tile_x]
         end
     end
 
@@ -136,14 +136,14 @@ class Back
                     tile.draw(x + j * 50, y + i * 50 - 20, 0)
                 end
             end
-        #elsif @stagemum == 5
-        #@map4.each_with_index do |row, i|
-        #    row.each_with_index do |tile_num, j|
-        #        tile = @tiles[tile_num]
-        #        next if tile.nil?
-        #        tile.draw(x + j * 50, y + i * 50 - 20, 1)
-        #    end
-        #end
+        elsif @stagemum == 5
+            @map4.each_with_index do |row, i|
+                row.each_with_index do |tile_num, j|
+                    tile = @tiles[tile_num]
+                    next if tile.nil?
+                    tile.draw(x + j * 50, y + i * 50 - 20, 1)
+                end
+            end
         end
     end
 end
