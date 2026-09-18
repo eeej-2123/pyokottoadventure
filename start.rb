@@ -6,6 +6,8 @@ class Start
         @sousa_b=Gosu::Image.new("media/start/sousa_b.png")
         @settei_b=Gosu::Image.new("media/start/settei_b.png")
         @select=Gosu::Image.new("media/start/select.png")
+        @settei=Gosu::Image.new("media/back/settei.png")
+        @sousa=Gosu::Image.new("media/back/sousa.png")
 
         @select_mode = 0
     end
