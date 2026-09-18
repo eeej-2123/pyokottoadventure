@@ -21,9 +21,21 @@ class Back
     end
 
     def input_back #背景配置の読み込み
-        @map = File.readlines("media/map/1-1.txt").map do |line|
+        @map0 = File.readlines("media/map/1-1.txt").map do |line|
             line.split.map(&:to_i)
         end
+        @map1 = File.readlines("media/map/1-2.txt").map do |line|
+            line.split.map(&:to_i)
+        end
+        @map2 = File.readlines("media/map/1-3.txt").map do |line|
+            line.split.map(&:to_i)
+        end
+        @map3 = File.readlines("media/map/1-4.txt").map do |line|
+            line.split.map(&:to_i)
+        end
+        #@map4 = File.readlines("media/map/1-5.txt").map do |line|
+        #    line.split.map(&:to_i)
+        #end
     end
 
     def change_stage
@@ -62,20 +74,76 @@ class Back
         tile_x = (x / 50).to_i
         tile_y = (y / 50).to_i
 
-        return nil if tile_y < 0 || tile_y >= @map.length
-        return nil if tile_x < 0 || tile_x >= @map[tile_y].length
+        if @stagemum == 1
+            return nil if tile_y < 0 || tile_y >= @map0.length
+            return nil if tile_x < 0 || tile_x >= @map0[tile_y].length
 
-        return @map[tile_y][tile_x]
+            return @map0[tile_y][tile_x]
+        elsif @stagemum == 2
+            return nil if tile_y < 0 || tile_y >= @map1.length
+            return nil if tile_x < 0 || tile_x >= @map1[tile_y].length
+
+            return @map1[tile_y][tile_x]
+        elsif @stagemum == 3
+            return nil if tile_y < 0 || tile_y >= @map2.length
+            return nil if tile_x < 0 || tile_x >= @map2[tile_y].length
+
+            return @map2[tile_y][tile_x]
+        elsif @stagemum == 4
+            return nil if tile_y < 0 || tile_y >= @map3.length
+            return nil if tile_x < 0 || tile_x >= @map3[tile_y].length
+
+            return @map3[tile_y][tile_x]
+        #elsif @stagemum == 5
+        #return nil if tile_y < 0 || tile_y >= @map4.length
+        #return nil if tile_x < 0 || tile_x >= @map4[tile_y].length
+
+        #return @map4[tile_y][tile_x]
+        end
     end
 
     def draw(x, y) #背景の描画
         @image[0].draw(0, 0, -1)
-        @map.each_with_index do |row, i|
-            row.each_with_index do |tile_num, j|
-                tile = @tiles[tile_num]
-                next if tile.nil?
-                tile.draw(x + j * 50, y + i * 50 - 20, 1)
+        if @stagemum == 1
+            @map0.each_with_index do |row, i|
+                row.each_with_index do |tile_num, j|
+                    tile = @tiles[tile_num]
+                    next if tile.nil?
+                    tile.draw(x + j * 50, y + i * 50 - 20, 1)
+                end
             end
+        elsif @stagemum == 2
+            @map1.each_with_index do |row, i|
+                row.each_with_index do |tile_num, j|
+                    tile = @tiles[tile_num]
+                    next if tile.nil?
+                    tile.draw(x + j * 50, y + i * 50 - 20, 1)
+                end
+            end
+        elsif @stagemum == 3
+            @map2.each_with_index do |row, i|
+                row.each_with_index do |tile_num, j|
+                    tile = @tiles[tile_num]
+                    next if tile.nil?
+                    tile.draw(x + j * 50, y + i * 50 - 20, 1)
+                end
+            end
+        elsif @stagemum == 4
+            @map3.each_with_index do |row, i|
+                row.each_with_index do |tile_num, j|
+                    tile = @tiles[tile_num]
+                    next if tile.nil?
+                    tile.draw(x + j * 50, y + i * 50 - 20, 1)
+                end
+            end
+        #elsif @stagemum == 5
+        #@map4.each_with_index do |row, i|
+        #    row.each_with_index do |tile_num, j|
+        #        tile = @tiles[tile_num]
+        #        next if tile.nil?
+        #        tile.draw(x + j * 50, y + i * 50 - 20, 1)
+        #    end
+        #end
         end
     end
 end
