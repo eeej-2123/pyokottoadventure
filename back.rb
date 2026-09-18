@@ -17,11 +17,11 @@ class Back
 
     def input_tiles #タイル画像の読み込み
         @tiles = {
-            1 => Gosu::Image.new("media/tiles/kusa.png"),
-            2 => Gosu::Image.new("media/tiles/tuti.png"),
-            3 => Gosu::Image.new("media/tiles/renga.png"),
-            4 => Gosu::Image.new("media/tiles/brock.png"),
-            5 => Gosu::Image.new("media/tiles/hatena.png")
+            1 => Gosu::Image.new("media/tiles1-1/kusa.png"),
+            2 => Gosu::Image.new("media/tiles1-1/tuti.png"),
+            3 => Gosu::Image.new("media/tiles1-1/renga.png"),
+            4 => Gosu::Image.new("media/tiles1-1/brock.png"),
+            5 => Gosu::Image.new("media/tiles1-1/hatena.png")
         }
     end
 

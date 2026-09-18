@@ -41,9 +41,26 @@ class Start
     def selected
         if @select_mode == 0
             return 1
+        elsif @select_mode == 1
+            return 2
+        elsif @select_mode == 2
+            return 3
         end
     end
     
+    def draw_settei
+        @name.draw(84.5, 0, 0)
+        @back.draw(0, 0, -1)
+        @settei.draw(0, 0, 0)
+    
+    end
+
+    def draw_sousa
+        @name.draw(84.5, 0, 0)
+        @back.draw(0, 0, -1)
+        @sousa.draw(0, 0, 0)
+    end
+
     def draw
         @name.draw(84.5, 0, 0)
         @back.draw(0, 0, -1)
