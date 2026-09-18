@@ -155,7 +155,7 @@ end
 
     if @scleen_num == 1
       if @outed == 1 || @cleared == 2
-        @gameover.draw(@player.get_life)
+        @gameover.draw(@player.get_life, @back.get_stagemum)
         @fleem += 1
         if @fleem == 50
           @outed = 0

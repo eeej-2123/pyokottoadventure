@@ -16,6 +16,10 @@ class Back
         input_tiles
     end
 
+    def get_stagemum
+        return @stagemum
+    end
+
     def input_back #背景配置の読み込み
         @map = File.readlines("media/map/1-1.txt").map do |line|
             line.split.map(&:to_i)
@@ -38,7 +42,19 @@ class Back
             2 => Gosu::Image.new("media/tiles1-1/tuti.png"),
             3 => Gosu::Image.new("media/tiles1-1/renga.png"),
             4 => Gosu::Image.new("media/tiles1-1/brock.png"),
-            5 => Gosu::Image.new("media/tiles1-1/hatena.png")
+            5 => Gosu::Image.new("media/tiles1-1/hatena.png"),
+            6 => Gosu::Image.new("media/tiles1-2/iron.png"),
+            7 => Gosu::Image.new("media/tiles1-2/toge.png"),
+            8 => Gosu::Image.new("media/tiles1-4/grass.png"),
+            9 => Gosu::Image.new("media/tiles1-3/sand.png"),
+            10 => Gosu::Image.new("media/tiles1-3/coin.png"),
+            11 => Gosu::Image.new("media/tiles1-3/under_toge.png"),
+            12 => Gosu::Image.new("media/tiles1-4/ice_toge_up.png"),
+            13 => Gosu::Image.new("media/tiles1-4/ice_toge_down.png"),
+            #14 => Gosu::Image.new("media/tiles1-5/hatena10.png"),
+            #15 => Gosu::Image.new("media/tiles1-5/hatena11.png"),
+            #16 => Gosu::Image.new("media/tiles1-5/hatena12.png"),
+            #17 => Gosu::Image.new("media/tiles1-5/hatena13.png"),
         }
     end
 
