@@ -16,6 +16,7 @@ class Player
         @score = 0
         @life=3
         @back = Back.new(self)
+        @dying = false
     end
 
     def get_back_obj
@@ -50,6 +51,29 @@ class Player
         @x, @y = x, y
         @vel_x = @vel_y = 0.0
         @image_angle = 1
+    end
+
+    def dying?
+        @dying
+    end
+
+    def die #死亡演出を開始(その場で少し跳ねる)
+        @dying = true
+        @vel_x = 0
+        @vel_y = -15   # 上に少し跳ねる強さ(お好みで調整)
+    end
+
+    def update_dying #死亡演出中の落下(毎フレーム)
+        @vel_y += 1     # 重力
+        @y += @vel_y
+    end
+
+    def dying_finished? #画面外まで落ちたか
+        @y > 480 + 50   # 画面の高さ+余白まで落ちたら終了
+    end
+
+    def end_dying
+        @dying = false
     end
 
     CHAR_WIDTH = 50   # キャラクターの幅(実際の画像サイズに合わせて調整)

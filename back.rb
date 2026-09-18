@@ -10,7 +10,7 @@ class Back
         @x = @y = 0.0
         @xmax = 59
         @ymax = 9
-        @stagemum = 4
+        @stagemum = 3
 
         input_back    # マップとタイル画像はinitializeで一度だけ読み込む
         input_tiles
