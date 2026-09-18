@@ -23,7 +23,7 @@ class GameWindow < Gosu::Window
     end
 
     @scleen_num=0
-    @player.warp(20, 240)
+    @player.warp(20, 330)
     @outed = 1
     @up_pressed = 0
     @cleared = 0
@@ -48,19 +48,79 @@ class GameWindow < Gosu::Window
     end
 
     if @scleen_num == 1 && @outed == 0
-
-      if @player.dying?
+      if @player.clearing?
+        @fleem+=1
+        if @fleem >= 120
+          @player.move_right
+          @player.move
+          if @player.clearing_finished?
+            @back.change_stage
+            @fleem = 0
+            if @back.get_stagemum != 6
+              @cleared = 1
+              @player.warp(20, 330)
+              enemy_warp
+            else
+              @player.warp(-40,330)
+            end
+            @player.set_back
+            @clear.reset
+            @player.end_clearing
+          end
+        elsif @fleem % 30 == 0 && @fleem > 0
+            @player.update_clearing
+        else
+            @player.down
+            @player.move
+        end
+        
+      elsif @player.dying?
         # 死亡演出中:通常操作・当たり判定はせず、落下だけ進める
         @player.update_dying
 
         if @player.dying_finished?
           @player.end_dying
-          @player.warp(20, 240)
+          @player.warp(20, 330)
           @player.set_back
           enemy_warp
           @outed = 1
+          @fleem = 0
         end
 
+      elsif @back.get_stagemum == 6  
+        @fleem+=1
+        if @fleem < 40 
+          @player.move_right
+          @player.move
+        elsif @fleem < 80
+          if @fleem == 40
+            @up_pressed = @player.move_up(@up_pressed)
+          else
+            @player.down
+          end
+          @player.move
+        elsif@fleem < 120
+          if @fleem == 80
+            @up_pressed = @player.move_up(@up_pressed)
+          else
+            @player.down
+          end
+          @player.move
+        else
+          if button_down? Gosu::KB_RETURN then
+            @scleen_num=0
+            @player.warp(20, 330)
+            @outed = 1
+            @up_pressed = 0
+            @cleared = 0
+            @fleem = 0
+            @traped = 0
+            @clear.reset
+            @back.set
+            enemy_warp
+            @player.set_life
+          end
+        end
       else
         # 通常時の処理(今まで通り)
         if button_down? Gosu::KbLeft or button_down? Gosu::GpLeft then
@@ -104,22 +164,7 @@ class GameWindow < Gosu::Window
         end
 
         if @clear.check_clear(@player.get_x - @player.get_back, @player.get_y) && @cleared==0
-          @cleared = 1
-        end
-
-        if @cleared == 1
-          @fleem+=1
-          if @fleem == 40
-            if !@back.change_stage
-              continue
-            end
-            @cleared = 2
-            @fleem = 0
-            @player.warp(20, 240)
-            @player.set_back
-            @clear.reset
-            enemy_warp
-          end
+          @player.clear
         end
       end
     end
@@ -212,7 +257,7 @@ class GameWindow < Gosu::Window
     end
 
     if @scleen_num == 1
-      if @outed == 1 || @cleared == 2
+      if @outed == 1 || @cleared == 1
         @gameover.draw(@player.get_life, @back.get_stagemum)
         @fleem += 1
         if @fleem == 50
@@ -223,7 +268,7 @@ class GameWindow < Gosu::Window
       else
         @player.draw
         @clear.draw(@player.get_back, 0)
-        if @back.get_stagemum != 5
+        if @back.get_stagemum < 5
           @enemy[0].draw(@player.get_back, 0)
           @enemy[1].draw(@player.get_back, 0)
           @enemy[2].draw(@player.get_back, 0)

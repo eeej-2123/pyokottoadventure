@@ -17,6 +17,12 @@ class Player
         @life=3
         @back = Back.new(self)
         @dying = false
+        @clearing = false
+        @allclearing = false
+    end
+
+    def set_life
+        @life=3
     end
 
     def get_back_obj
@@ -75,6 +81,28 @@ class Player
     def end_dying
         @dying = false
     end
+
+    def clearing?
+        @clearing
+    end
+
+    def clear 
+        @clearing = true
+        @image_angle = 1
+    end
+
+    def update_clearing
+        @image_angle *= -1
+    end
+
+    def clearing_finished? 
+        @x > 640 + 100   
+    end
+
+    def end_clearing
+        @clearing = false
+    end
+
 
     CHAR_WIDTH = 50   # キャラクターの幅(実際の画像サイズに合わせて調整)
     CHAR_HEIGHT = 50  # キャラクターの高さ(実際の画像サイズに合わせて調整)
@@ -233,6 +261,7 @@ class Player
     STAGE_LEFT_LIMIT = 0
     
     def move
+
         if @bx==0 && @x <= 320 || @bx== -59*50+640 && @x >= 310
             @x += @vel_x
         else

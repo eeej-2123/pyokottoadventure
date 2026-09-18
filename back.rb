@@ -1,19 +1,24 @@
 class Back
     def initialize(window)
-        @image = Array.new(5)
+        @image = Array.new(6)
         @image[0] = Gosu::Image.new("media/back/Sora.png")
         @image[1] = Gosu::Image.new("media/back/kojo.png")
         @image[2] = Gosu::Image.new("media/back/Sora.png")
         @image[3] = Gosu::Image.new("media/back/kori.png")
         @image[4] = Gosu::Image.new("media/back/maguma.png")
+        @image[5] = Gosu::Image.new("media/back/Sora.png")
 
         @x = @y = 0.0
         @xmax = 59
         @ymax = 9
-        @stagemum = 1
+        @stagemum = 6
 
         input_back    # マップとタイル画像はinitializeで一度だけ読み込む
         input_tiles
+    end
+
+    def set
+        @stagemum = 1
     end
 
     def get_stagemum
@@ -45,17 +50,14 @@ class Back
         @map4 = File.readlines("media/map/1-5.txt").map do |line|
             line.split.map(&:to_i)
         end
-    end
-
-    def change_stage
-        if @stagemum < 5
-           @stagemum += 1
-           return true
-        else
-            return false
+        @clearmap = File.readlines("media/map/clear.txt").map do |line|
+            line.split.map(&:to_i)
         end
     end
 
+    def change_stage    
+       @stagemum += 1
+    end
 
     def input_tiles #タイル画像の読み込み
         @tiles = {
@@ -107,6 +109,11 @@ class Back
             return nil if tile_x < 0 || tile_x >= @map4[tile_y].length
 
             return @map4[tile_y][tile_x]
+        elsif @stagemum == 6
+            return nil if tile_y < 0 || tile_y >= @map4.length
+            return nil if tile_x < 0 || tile_x >= @map4[tile_y].length
+
+            return @clearmap[tile_y][tile_x]
         end
     end
 
@@ -146,6 +153,14 @@ class Back
             end
         elsif @stagemum == 5
             @map4.each_with_index do |row, i|
+                row.each_with_index do |tile_num, j|
+                    tile = @tiles[tile_num]
+                    next if tile.nil?
+                    tile.draw(x + j * 50, y + i * 50 - 20, 0)
+                end
+            end
+        elsif @stagemum == 6
+            @clearmap.each_with_index do |row, i|
                 row.each_with_index do |tile_num, j|
                     tile = @tiles[tile_num]
                     next if tile.nil?
