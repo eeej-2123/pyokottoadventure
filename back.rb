@@ -1,9 +1,16 @@
 class Back
     def initialize(window)
-        @image = Gosu::Image.new("media/back/Sora.png")
+        @image = Array.new(5)
+        @image[0] = Gosu::Image.new("media/back/Sora.png")
+        @image[1] = Gosu::Image.new("media/back/Sora.png")
+        @image[2] = Gosu::Image.new("media/back/Sora.png")
+        @image[3] = Gosu::Image.new("media/back/Sora.png")
+        @image[4] = Gosu::Image.new("media/back/Sora.png")
+
         @x = @y = 0.0
         @xmax = 59
         @ymax = 9
+        @stagemum = 1
 
         input_back    # マップとタイル画像はinitializeで一度だけ読み込む
         input_tiles
@@ -14,6 +21,16 @@ class Back
             line.split.map(&:to_i)
         end
     end
+
+    def change_stage
+        if @stagemum < 5
+           @stagemum += 1
+           return true
+        else
+            return false
+        end
+    end
+
 
     def input_tiles #タイル画像の読み込み
         @tiles = {
@@ -36,7 +53,7 @@ class Back
     end
 
     def draw(x, y) #背景の描画
-        @image.draw(0, 0, -1)
+        @image[0].draw(0, 0, -1)
         @map.each_with_index do |row, i|
             row.each_with_index do |tile_num, j|
                 tile = @tiles[tile_num]

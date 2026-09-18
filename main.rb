@@ -17,10 +17,11 @@ class GameWindow < Gosu::Window
     @clear = Clear.new(self)
     @start = Start.new(self)
     @enemy = Enemy.new(self, @player.get_back_obj)
+    @back = Back.new(self)
 
     @scleen_num=0
     @player.warp(20, 240)
-    @enemy.warp(18*50, 6*50-20)
+    #@enemy.warp(18*50, 6*50-20)
     @outed = 1
     @up_pressed = 0
     @cleared = 0
@@ -55,7 +56,7 @@ class GameWindow < Gosu::Window
       @player.check_ceiling
       @player.move
       @enemy.move_enemy
-      check_enemy_collision
+      #check_enemy_collision
 
       if @gameover.gameover(@player.get_x, @player.get_y)
         @player.warp(20, 240)
@@ -71,6 +72,9 @@ class GameWindow < Gosu::Window
       if @cleared == 1
         @fleem+=1
         if @fleem == 40
+          if !@back.change_stage
+            continue
+          end
           @cleared = 2
           @fleem = 0
           @player.warp(20, 240)
@@ -161,7 +165,7 @@ end
       else
         @player.draw
         @clear.draw(@player.get_back, 0)
-        @enemy.draw(@player.get_back, 0)
+        #@enemy.draw(@player.get_back, 0)
         # Drawing code goes here
       end
     end
