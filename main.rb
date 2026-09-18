@@ -58,6 +58,13 @@ class GameWindow < Gosu::Window
       @enemy.move_enemy
       #check_enemy_collision
 
+      if @player.check_hazard
+        @player.warp(20, 240)
+        @player.set_back
+        @player.down_life
+        @outed = 1
+      end
+
       if @gameover.gameover(@player.get_x, @player.get_y)
         @player.warp(20, 240)
         @player.set_back
