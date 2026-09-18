@@ -114,7 +114,7 @@ class Player
     HAZARD_BOTTOM = [11, 13]
 
     def check_hazard
-        left_x  = @x - @bx
+        left_x  = @x - @bx + 5
         right_x = @x - @bx + 40      # down と同じ基準に合わせる
 
         # 足元(上から乗った)判定
@@ -125,7 +125,7 @@ class Player
         return true if HAZARD_TOP.include?(tile_left_foot) || HAZARD_TOP.include?(tile_right_foot)
 
         # 頭上(下から触れた)判定
-        head_y = @y - 1
+        head_y = @y - 10
         tile_left_head  = @back.check_tile(left_x,  head_y)
         tile_right_head = @back.check_tile(right_x, head_y)
 
