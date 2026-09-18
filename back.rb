@@ -10,7 +10,7 @@ class Back
         @x = @y = 0.0
         @xmax = 59
         @ymax = 9
-        @stagemum = 5
+        @stagemum = 1
 
         input_back    # マップとタイル画像はinitializeで一度だけ読み込む
         input_tiles
@@ -63,10 +63,8 @@ class Back
             11 => Gosu::Image.new("media/tiles1-3/under_toge.png"),
             12 => Gosu::Image.new("media/tiles1-4/ice_toge_up.png"),
             13 => Gosu::Image.new("media/tiles1-4/ice_toge_down.png"),
-            14 => Gosu::Image.new("media/tiles1-5/hatena10.png"),
-            15 => Gosu::Image.new("media/tiles1-5/hatena11.png"),
-            16 => Gosu::Image.new("media/tiles1-5/hatena12.png"),
-            17 => Gosu::Image.new("media/tiles1-5/hatena13.png"),
+            15 => Gosu::Image.new("media/tiles1-5/maguma.png"),
+            14 => Gosu::Image.new("media/tiles1-5/redrenga.png"),
         }
     end
 
