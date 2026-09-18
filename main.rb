@@ -10,18 +10,20 @@ class GameWindow < Gosu::Window
   def initialize
     super 640, 480
     self.caption = "ピョコっとアドベンチャー"
-
+    @enemy=Array.new(3)
     #@image = Gosu::Image.new("media/Space.png")
     @player = Player.new(self)
     @gameover = Gameover.new(self)
     @clear = Clear.new(self)
     @start = Start.new(self)
-    @enemy = Enemy.new(self, @player.get_back_obj)
     @back = @player.get_back_obj
+
+    for i in 0..2 do
+      @enemy[i]=Enemy.new(self, @player.get_back_obj)
+    end
 
     @scleen_num=0
     @player.warp(20, 240)
-    #@enemy.warp(18*50, 6*50-20)
     @outed = 1
     @up_pressed = 0
     @cleared = 0
@@ -55,6 +57,7 @@ class GameWindow < Gosu::Window
           @player.end_dying
           @player.warp(20, 240)
           @player.set_back
+          enemy_warp
           @outed = 1
         end
 
@@ -71,7 +74,14 @@ class GameWindow < Gosu::Window
         @player.check_ceiling
         @player.check_wall_x
         @player.move
-        @enemy.move_enemy
+        if @back.get_stagemum !=5
+          @enemy[0].move_enemy
+          @enemy[1].move_enemy
+          @enemy[2].move_enemy
+          check_enemy_collision(0)
+          check_enemy_collision(1)
+          check_enemy_collision(2)
+        end
 
         if @back.get_stagemum==3
           if @player.passed_x?(50*40) && @traped==0
@@ -108,6 +118,7 @@ class GameWindow < Gosu::Window
             @player.warp(20, 240)
             @player.set_back
             @clear.reset
+            enemy_warp
           end
         end
       end
@@ -119,10 +130,31 @@ class GameWindow < Gosu::Window
 
   end
 
+  def enemy_warp
+    if @back.get_stagemum==1
+          @enemy[0].warp(11*50, 7*50-20)
+          @enemy[1].warp(40*50, 7*50-20)
+          @enemy[2].warp(54*50, 7*50-20)
+        elsif @back.get_stagemum==2
+          @enemy[0].warp(8*50, 7*50-20)
+          @enemy[1].warp(18*50, 0*50-20)
+          @enemy[2].warp(45*50, 4*50-20)
+        elsif @back.get_stagemum==3
+          @enemy[0].warp(15*50, 4*50-20)
+          @enemy[1].warp(35*50, 7*50-20)
+          @enemy[2].warp(53*50, 4*50-20)
+        elsif @back.get_stagemum==4
+          @enemy[0].warp(5*50, 3*50-20)
+          @enemy[1].warp(18*50, 7*50-20)
+          @enemy[2].warp(47*50, 7*50-20)
+        end
+  end
+
   def button_down(id)
     if @scleen_num == 0
       if id == Gosu::KB_RETURN
         @scleen_num = @start.selected
+        enemy_warp
       end
     elsif @scleen_num == 1
       if id == Gosu::KbUp
@@ -142,16 +174,16 @@ class GameWindow < Gosu::Window
     end
   end
 
-  def check_enemy_collision
-    return unless @enemy.alive?
+  def check_enemy_collision(i)
+    return unless @enemy[i].alive?
 
     px = @player.get_x - @player.get_back
     py = @player.get_y
     pw = Player::CHAR_WIDTH
     ph = Player::CHAR_HEIGHT
 
-    ex = @enemy.get_x
-    ey = @enemy.get_y
+    ex = @enemy[i].get_x
+    ey = @enemy[i].get_y
     ew = Enemy::CHAR_WIDTH
     eh = Enemy::CHAR_HEIGHT
 
@@ -165,14 +197,12 @@ class GameWindow < Gosu::Window
 
     if overlap_y < overlap_x && py < ey && @player.get_vel_y > 0
         # 縦方向の重なりが浅く、プレイヤーが上にいて落下中 → 上から踏んだ
-        @enemy.defeat
+        @enemy[i].defeat
         @player.bounce   # 任意:踏んだ時に少し跳ねさせる
     else
-        # それ以外 → 横からぶつかった → ゲームオーバー扱い
-        @player.warp(20, 240)
-        @player.set_back
+        # それ以外 → 横からぶつかった → 死亡演出を開始
         @player.down_life
-        @outed = 1
+        @player.die
     end
   end
 
@@ -193,8 +223,12 @@ class GameWindow < Gosu::Window
       else
         @player.draw
         @clear.draw(@player.get_back, 0)
-        #@enemy.draw(@player.get_back, 0)
+        if @back.get_stagemum != 5
+          @enemy[0].draw(@player.get_back, 0)
+          @enemy[1].draw(@player.get_back, 0)
+          @enemy[2].draw(@player.get_back, 0)
         # Drawing code goes here
+        end
       end
     end
     if @scleen_num == 2

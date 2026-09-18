@@ -49,6 +49,7 @@ class Enemy
     def warp(x, y)
         @x = x
         @y = y
+        @state= :alive
     end
 
     # 進行方向の壁チェック

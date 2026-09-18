@@ -233,7 +233,6 @@ class Player
     STAGE_LEFT_LIMIT = 0
     
     def move
-
         if @bx==0 && @x <= 320 || @bx== -59*50+640 && @x >= 310
             @x += @vel_x
         else
