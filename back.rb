@@ -18,7 +18,7 @@ class Back
         @x = @y = 0.0
         @xmax = 59
         @ymax = 9
-        @stagemum = 1
+        @stagemum = 3
         @sound_size = 1.0   # 100 → 1.0 に変更
         input_back    # マップとタイル画像はinitializeで一度だけ読み込む
         input_tiles
@@ -103,6 +103,15 @@ class Back
             14 => Gosu::Image.new("media/tiles1-5/redrenga.png"),
             16 => Gosu::Image.new("media/tiles1-5/redrenga.png"),
         }
+    end
+
+    def change_tile
+        for i in 6..9
+            for j in 37..39
+                @map2[i][j]==@map2[i][j+5]
+                @map2[i][j+5]=0
+            end
+        end
     end
 
     def check_tile(x, y) #タイルの判定(x, yはピクセル座標)
