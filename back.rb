@@ -213,7 +213,6 @@ class Back
             end
             @ninjin.draw(320,195,0)
             @kuria.draw(70,50,1)
-            @modori.draw(320-75,200,1)
         end
     end
 end

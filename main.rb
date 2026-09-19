@@ -17,6 +17,7 @@ class GameWindow < Gosu::Window
     @clear = Clear.new(self)
     @start = Start.new(self)
     @back = @player.get_back_obj
+    @modori=Gosu::Image.new("media/back/modori.png")
 
     for i in 0..2 do
       @enemy[i]=Enemy.new(self, @player.get_back_obj)
@@ -29,6 +30,7 @@ class GameWindow < Gosu::Window
     @cleared = 0
     @fleem = 0
     @traped = 0
+    @finished=0
   end
 
   def update
@@ -95,6 +97,7 @@ class GameWindow < Gosu::Window
           end
           @player.move
         else
+          @finished=1
           if button_down? Gosu::KB_RETURN then
             @scleen_num=0
             @player.warp(20, 330)
@@ -107,6 +110,7 @@ class GameWindow < Gosu::Window
             @back.set
             enemy_warp
             @player.set_life
+            @finished=0
           end
         end
       else
@@ -281,6 +285,9 @@ class GameWindow < Gosu::Window
           @enemy[2].draw(@player.get_back, 0)
         # Drawing code goes here
         end
+      end
+      if @finished==1
+        @modori.draw(320-75,200,1)
       end
     end
     if @scleen_num == 2
