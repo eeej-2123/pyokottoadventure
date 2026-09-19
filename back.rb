@@ -20,11 +20,15 @@ class Back
         @x = @y = 0.0
         @xmax = 59
         @ymax = 9
-        @stagemum = 6
+        @stagemum = 1
         @sound_size = 1.0   # 100 → 1.0 に変更
         input_back    # マップとタイル画像はinitializeで一度だけ読み込む
         input_tiles
         start_bgm(0)
+    end
+
+    def set
+        @stagemum = 1
     end
 
     def get_stagemum
