@@ -32,21 +32,6 @@ class GameWindow < Gosu::Window
   end
 
   def update
-    if @scleen_num == 0
-      if button_down? Gosu::KbLeft or button_down? Gosu::GpLeft then
-        @start.change_mode(0)
-      end
-      if button_down? Gosu::KbRight or button_down? Gosu::GpRight then
-        @start.change_mode(1)
-      end
-      if button_down? Gosu::KbUp then
-        @start.change_mode(2)
-      end
-      if button_down? Gosu::KbDown then
-        @start.change_mode(3)
-      end
-    end
-
     if @scleen_num == 1 && @outed == 0
       if @player.clearing?
         @fleem+=1
@@ -137,7 +122,7 @@ class GameWindow < Gosu::Window
         @player.check_ceiling
         @player.check_wall_x
         @player.move
-        if @back.get_stagemum !=5
+        if @back.get_stagemum != 5
           @enemy[0].move_enemy
           @enemy[1].move_enemy
           @enemy[2].move_enemy
@@ -172,8 +157,8 @@ class GameWindow < Gosu::Window
       end
     end
     if @scleen_num == 2
-    end
-    if @scleen_num == 3
+      @back.change_sound(@start.get_sound(0))
+      @player.change_sound(@start.get_sound(1))
     end
 
   end
@@ -199,6 +184,21 @@ class GameWindow < Gosu::Window
   end
 
   def button_down(id)
+    if @scleen_num == 0 || @scleen_num == 2
+      if id == Gosu::KbLeft or id == Gosu::GpLeft
+        @start.change_mode(0, @scleen_num)
+      end
+      if id == Gosu::KbRight or id == Gosu::GpRight
+        @start.change_mode(1, @scleen_num)
+      end
+      if id == Gosu::KbUp
+        @start.change_mode(2, @scleen_num)
+      end
+      if id == Gosu::KbDown
+        @start.change_mode(3, @scleen_num)
+      end
+    end
+
     if @scleen_num == 0
       if id == Gosu::KB_RETURN
         @scleen_num = @start.selected

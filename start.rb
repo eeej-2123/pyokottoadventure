@@ -8,9 +8,18 @@ class Start
         @select=Gosu::Image.new("media/start/select.png")
         @settei=Gosu::Image.new("media/back/settei.png")
         @sousa=Gosu::Image.new("media/back/sousa.png")
+        @settei_s=Gosu::Image.new("media/clear/ninjin.png")
 
         @settei_mode = 0
         @select_mode = 0
+        @sound=Array.new(2)
+        @sound[0] = 1
+        @sound[1] = 1
+        @font = Gosu::Font.new(26)
+    end
+
+    def get_sound(i)
+        return @sound[i]
     end
 
     def change_mode(i,scleen)
@@ -38,28 +47,22 @@ class Start
                     @select_mode = 1
                 end
             end
-        elsif scleen == 2 || scleen == 3
-             if i == 0 #左
-                if @settei_mode == 2
-                    @select_mode = 1
-                end
-            end
-
-            if i == 1 #右
-                if @select_mode == 1
-                    @select_mode = 2
+        elsif scleen == 2
+            if i == 0 || i == 1#左右
+                if @settei_mode == 0 || @settei_mode == 1
+                    @sound[@settei_mode] *= -1
                 end
             end
 
             if i == 2 #上
-                if @select_mode==1 || @select_mode==2
-                    @select_mode = 0
+                if @settei_mode==2 || @settei_mode==1
+                    @settei_mode -= 1
                 end
             end
 
             if i == 3 #下
-                if @select_mode == 0
-                    @select_mode = 1
+                if @settei_mode == 0 || @settei_mode == 1
+                    @settei_mode += 1
                 end
             end
         end
@@ -75,11 +78,24 @@ class Start
         end
     end
     
-    def draw_settei
+        def draw_settei
         @name.draw(84.5, 0, 0)
         @back.draw(0, 0, -1)
         @settei.draw(0, 0, 0)
-    
+
+        if @settei_mode == 0
+            @settei_s.draw(110, 175, 0)
+        elsif @settei_mode == 1
+            @settei_s.draw(110, 250, 0)
+        elsif @settei_mode == 2
+            @settei_s.draw(160, 335, 0)
+        end
+
+        # ON/OFF表示
+        bgm_text = @sound[0] == 1 ? "ON" : "OFF"
+        se_text  = @sound[1] == 1 ? "ON" : "OFF"
+        @font.draw_text(bgm_text, 405, 190, 1)
+        @font.draw_text(se_text,  405, 265, 1)
     end
 
     def draw_sousa

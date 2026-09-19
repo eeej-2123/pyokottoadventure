@@ -26,7 +26,7 @@ class Player
         @dying = false
         @clearing = false
         @allclearing = false
-        @sound_size = 100
+        @sound_size = 1.0
         @run_wait=0
     end
 
@@ -60,6 +60,10 @@ class Player
 
     def set_back
         @bx=0
+    end
+
+    def change_sound(sound)
+        @sound_size = (sound == -1) ? 0.0 : 1.0
     end
 
     def warp(x, y)

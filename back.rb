@@ -19,68 +19,44 @@ class Back
         @xmax = 59
         @ymax = 9
         @stagemum = 1
-        @sound_size=100
-
+        @sound_size = 1.0   # 100 → 1.0 に変更
         input_back    # マップとタイル画像はinitializeで一度だけ読み込む
         input_tiles
         start_bgm(0)
-    end
-
-    def start_bgm(scleen)
-        if scleen == 1
-            if @stagemum==1
-                 @bgm1.play(true)
-            elsif @stagemum==2
-                 @bgm2.play(true)
-            elsif @stagemum==3
-                 @bgm3.play(true)
-            elsif @stagemum==4
-                 @bgm4.play(true)
-            elsif @stagemum==5
-                 @bgm5.play(true)
-            elsif @stagemum==6
-                 @bgms.play(true)
-            end
-        else
-            @bgms.play(true)
-        end
-    end
-
-    def stop_bgm(scleen)
-        if scleen == 1
-            if @stagemum==1
-                 @bgm1.stop
-            elsif @stagemum==2
-                 @bgm2.stop
-            elsif @stagemum==3
-                 @bgm3.stop
-            elsif @stagemum==4
-                 @bgm4.stop
-            elsif @stagemum==5
-                 @bgm5.stop
-            elsif @stagemum==6
-                 @bgms.stop
-            end
-        else
-            @bgms.stop
-        end
-    end
-
-    def set
-        @stagemum = 1
     end
 
     def get_stagemum
         return @stagemum
     end
 
-    def change_tile
-        for i in 6..9
-            for j in 37..39
-                @map2[i][j] = @map2[i][j+5]
-                @map2[i][j+5] = 0
-            end
+    def change_sound(sound)
+        @sound_size = (sound == -1) ? 0.0 : 1.0
+
+        # 今まさに流れている曲があれば、その場で音量を反映させる
+        bgm = current_bgm
+        bgm.volume = @sound_size if bgm
+    end
+
+    def current_bgm #現在再生されているはずのBGMを返す
+        case @stagemum
+        when 1 then @bgm1
+        when 2 then @bgm2
+        when 3 then @bgm3
+        when 4 then @bgm4
+        when 5 then @bgm5
+        when 6 then @bgms
         end
+    end
+
+    def start_bgm(scleen)
+        bgm = (scleen == 1) ? current_bgm : @bgms
+        bgm.play(true)
+        bgm.volume = @sound_size
+    end
+
+    def stop_bgm(scleen)
+        bgm = (scleen == 1) ? current_bgm : @bgms
+        bgm.stop
     end
     
     def input_back #背景配置の読み込み
