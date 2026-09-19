@@ -8,6 +8,13 @@ class Player
         @image[2] = Gosu::Image.new("media/usagi/usagi3.png")
         @image[3] = Gosu::Image.new("media/usagi/usagi4.png")
         @heart=Gosu::Image.new("media/usagi/heart.png")
+
+        @se_jump = Gosu::Sample.new("bgm/junp.mp3")
+        @se_get = Gosu::Sample.new("bgm/get.mp3")
+        @se_drop = Gosu::Sample.new("bgm/drop.mp3")
+        @se_run = Gosu::Sample.new("bgm/run.mp3")
+        @se_coin = Gosu::Sample.new("bgm/coin.mp3")
+
         @x = @y = @vel_x = @vel_y = 0.0
         @bx = 0.0
         @image_index = 0
@@ -19,6 +26,8 @@ class Player
         @dying = false
         @clearing = false
         @allclearing = false
+        @sound_size = 100
+        @run_wait=0
     end
 
     def set_life
@@ -67,6 +76,7 @@ class Player
         @dying = true
         @vel_x = 0
         @vel_y = -15   # 上に少し跳ねる強さ(お好みで調整)
+        @se_drop.play(@sound_size)
     end
 
     def update_dying #死亡演出中の落下(毎フレーム)
@@ -89,6 +99,7 @@ class Player
     def clear 
         @clearing = true
         @image_angle = 1
+        @se_get.play(@sound_size)
     end
 
     def update_clearing
@@ -111,7 +122,7 @@ class Player
         @vel_y = -10
     end
 
-   def move_left #左移動(速度をセットするだけ)
+    def move_left #左移動(速度をセットするだけ)
         @vel_x = -5
         @image_angle = -1
     end
@@ -171,6 +182,7 @@ class Player
             pressed = 0
         end
         if pressed < 2
+            @se_jump.play(@sound_size)
             @vel_y = -20
             pressed += 1
         end
@@ -261,7 +273,6 @@ class Player
     STAGE_LEFT_LIMIT = 0
     
     def move
-
         if @bx==0 && @x <= 320 || @bx== -59*50+640 && @x >= 310
             @x += @vel_x
         else
@@ -290,11 +301,17 @@ class Player
         elsif @vel_x != 0 && @image_wait > 6
             @image_index += 1
             @image_wait = 0
+            if @run_wait==0
+            @se_run.play(@sound_size)
+            @run_wait = 3
+            else
+                @run_wait -= 1
+            end
         elsif @vel_x == 0
             @image_index = 3
         end
 
-        if @back.get_stagemum==4
+        if @back.get_stagemum == 4
             @vel_x*=0.95
             if @image_angle == 1
                 if @vel_x < 0.01

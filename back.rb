@@ -8,13 +8,62 @@ class Back
         @image[4] = Gosu::Image.new("media/back/maguma.png")
         @image[5] = Gosu::Image.new("media/back/Sora.png")
 
+        @bgms = Gosu::Song.new("bgm/goal.mp3")
+        @bgm1 = Gosu::Song.new("bgm/1-1.mp3")
+        @bgm2 = Gosu::Song.new("bgm/1-2.mp3")
+        @bgm3 = Gosu::Song.new("bgm/1-3.mp3")
+        @bgm4 = Gosu::Song.new("bgm/1-4.mp3")
+        @bgm5 = Gosu::Song.new("bgm/1-5.mp3")
+
         @x = @y = 0.0
         @xmax = 59
         @ymax = 9
-        @stagemum = 6
+        @stagemum = 1
+        @sound_size=100
 
         input_back    # マップとタイル画像はinitializeで一度だけ読み込む
         input_tiles
+        start_bgm(0)
+    end
+
+    def start_bgm(scleen)
+        if scleen == 1
+            if @stagemum==1
+                 @bgm1.play(true)
+            elsif @stagemum==2
+                 @bgm2.play(true)
+            elsif @stagemum==3
+                 @bgm3.play(true)
+            elsif @stagemum==4
+                 @bgm4.play(true)
+            elsif @stagemum==5
+                 @bgm5.play(true)
+            elsif @stagemum==6
+                 @bgms.play(true)
+            end
+        else
+            @bgms.play(true)
+        end
+    end
+
+    def stop_bgm(scleen)
+        if scleen == 1
+            if @stagemum==1
+                 @bgm1.stop
+            elsif @stagemum==2
+                 @bgm2.stop
+            elsif @stagemum==3
+                 @bgm3.stop
+            elsif @stagemum==4
+                 @bgm4.stop
+            elsif @stagemum==5
+                 @bgm5.stop
+            elsif @stagemum==6
+                 @bgms.stop
+            end
+        else
+            @bgms.stop
+        end
     end
 
     def set

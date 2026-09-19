@@ -9,31 +9,58 @@ class Start
         @settei=Gosu::Image.new("media/back/settei.png")
         @sousa=Gosu::Image.new("media/back/sousa.png")
 
+        @settei_mode = 0
         @select_mode = 0
     end
 
-    def change_mode(i)
-        if i == 0 #左
-            if @select_mode == 2
-                @select_mode = 1
+    def change_mode(i,scleen)
+        if scleen == 0
+            if i == 0 #左
+                if @select_mode == 2
+                    @select_mode = 1
+                end
             end
-        end
 
-        if i == 1 #右
-            if @select_mode == 1
-                @select_mode = 2
+            if i == 1 #右
+                if @select_mode == 1
+                    @select_mode = 2
+                end
             end
-        end
 
-        if i == 2 #上
-            if @select_mode==1 || @select_mode==2
-                @select_mode = 0
+            if i == 2 #上
+                if @select_mode==1 || @select_mode==2
+                    @select_mode = 0
+                end
             end
-        end
 
-        if i == 3 #下
-            if @select_mode == 0
-                @select_mode = 1
+            if i == 3 #下
+                if @select_mode == 0
+                    @select_mode = 1
+                end
+            end
+        elsif scleen == 2 || scleen == 3
+             if i == 0 #左
+                if @settei_mode == 2
+                    @select_mode = 1
+                end
+            end
+
+            if i == 1 #右
+                if @select_mode == 1
+                    @select_mode = 2
+                end
+            end
+
+            if i == 2 #上
+                if @select_mode==1 || @select_mode==2
+                    @select_mode = 0
+                end
+            end
+
+            if i == 3 #下
+                if @select_mode == 0
+                    @select_mode = 1
+                end
             end
         end
     end

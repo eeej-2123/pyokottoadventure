@@ -54,6 +54,7 @@ class GameWindow < Gosu::Window
           @player.move_right
           @player.move
           if @player.clearing_finished?
+            @back.stop_bgm(@scleen_num)
             @back.change_stage
             @fleem = 0
             if @back.get_stagemum != 6
@@ -66,6 +67,7 @@ class GameWindow < Gosu::Window
             @player.set_back
             @clear.reset
             @player.end_clearing
+            @back.start_bgm(@scleen_num)
           end
         elsif @fleem % 30 == 0 && @fleem > 0
             @player.update_clearing
@@ -85,6 +87,7 @@ class GameWindow < Gosu::Window
           enemy_warp
           @outed = 1
           @fleem = 0
+          @back.stop_bgm(@scleen_num)
         end
 
       elsif @back.get_stagemum == 6  
@@ -265,6 +268,7 @@ class GameWindow < Gosu::Window
           @cleared = 0
           @fleem = 0
         end
+        @back.start_bgm(@scleen_num)
       else
         @player.draw
         @clear.draw(@player.get_back, 0)
