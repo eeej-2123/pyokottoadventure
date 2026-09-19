@@ -9,6 +9,8 @@ class Back
         @image[5] = Gosu::Image.new("media/back/Sora.png")
 
         @ninjin=Gosu::Image.new("media/back/ninjin.png")
+        @kuria=Gosu::Image.new("media/back/kuria.png")
+        @modori=Gosu::Image.new("media/back/modori.png")
 
         @bgms = Gosu::Song.new("bgm/goal.mp3")
         @bgm1 = Gosu::Song.new("bgm/1-1.mp3")
@@ -20,7 +22,7 @@ class Back
         @x = @y = 0.0
         @xmax = 59
         @ymax = 9
-        @stagemum = 1
+        @stagemum = 6
         @sound_size = 1.0   # 100 → 1.0 に変更
         input_back    # マップとタイル画像はinitializeで一度だけ読み込む
         input_tiles
@@ -29,6 +31,8 @@ class Back
 
     def set
         @stagemum = 1
+        input_back    # マップとタイル画像はinitializeで一度だけ読み込む
+        input_tiles
     end
 
     def get_stagemum
@@ -114,7 +118,7 @@ class Back
     def change_tile
         for i in 6..9
             for j in 37..39
-                @map2[i][j]==@map2[i][j+5]
+                @map2[i][j]=@map2[i][j+5]
                 @map2[i][j+5]=0
             end
         end
@@ -208,6 +212,8 @@ class Back
                 end
             end
             @ninjin.draw(320,195,0)
+            @kuria.draw(70,50,1)
+            @modori.draw(320-75,200,1)
         end
     end
 end
