@@ -10,18 +10,20 @@ class GameWindow < Gosu::Window
   def initialize
     super 640, 480
     self.caption = "ピョコっとアドベンチャー"
-
+    @enemy=Array.new(3)
     #@image = Gosu::Image.new("media/Space.png")
     @player = Player.new(self)
     @gameover = Gameover.new(self)
     @clear = Clear.new(self)
     @start = Start.new(self)
-    @enemy = Enemy.new(self, @player.get_back_obj)
     @back = @player.get_back_obj
 
+    for i in 0..2 do
+      @enemy[i]=Enemy.new(self, @player.get_back_obj)
+    end
+
     @scleen_num=0
-    @player.warp(20, 240)
-    #@enemy.warp(18*50, 6*50-20)
+    @player.warp(20, 330)
     @outed = 1
     @up_pressed = 0
     @cleared = 0
@@ -30,34 +32,83 @@ class GameWindow < Gosu::Window
   end
 
   def update
-    if @scleen_num == 0
-      if button_down? Gosu::KbLeft or button_down? Gosu::GpLeft then
-        @start.change_mode(0)
-      end
-      if button_down? Gosu::KbRight or button_down? Gosu::GpRight then
-        @start.change_mode(1)
-      end
-      if button_down? Gosu::KbUp then
-        @start.change_mode(2)
-      end
-      if button_down? Gosu::KbDown then
-        @start.change_mode(3)
-      end
-    end
-
     if @scleen_num == 1 && @outed == 0
-
-      if @player.dying?
+      if @player.clearing?
+        @fleem+=1
+        if @fleem >= 120
+          @player.move_right
+          @player.move
+          if @player.clearing_finished?
+            @back.stop_bgm(@scleen_num)
+            @back.change_stage
+            @fleem = 0
+            if @back.get_stagemum != 6
+              @cleared = 1
+              @player.warp(20, 330)
+              enemy_warp
+            else
+              @player.warp(-40,330)
+            end
+            @player.set_back
+            @clear.reset
+            @player.end_clearing
+            @back.start_bgm(@scleen_num)
+          end
+        elsif @fleem % 30 == 0 && @fleem > 0
+            @player.update_clearing
+        else
+            @player.down
+            @player.move
+        end
+        
+      elsif @player.dying?
         # 死亡演出中:通常操作・当たり判定はせず、落下だけ進める
         @player.update_dying
 
         if @player.dying_finished?
           @player.end_dying
-          @player.warp(20, 240)
+          @player.warp(20, 330)
           @player.set_back
+          enemy_warp
           @outed = 1
+          @fleem = 0
+          @back.stop_bgm(@scleen_num)
         end
 
+      elsif @back.get_stagemum == 6  
+        @fleem+=1
+        if @fleem < 40 
+          @player.move_right
+          @player.move
+        elsif @fleem < 80
+          if @fleem == 40
+            @up_pressed = @player.move_up(@up_pressed)
+          else
+            @player.down
+          end
+          @player.move
+        elsif@fleem < 120
+          if @fleem == 80
+            @up_pressed = @player.move_up(@up_pressed)
+          else
+            @player.down
+          end
+          @player.move
+        else
+          if button_down? Gosu::KB_RETURN then
+            @scleen_num=0
+            @player.warp(20, 330)
+            @outed = 1
+            @up_pressed = 0
+            @cleared = 0
+            @fleem = 0
+            @traped = 0
+            @clear.reset
+            @back.set
+            enemy_warp
+            @player.set_life
+          end
+        end
       else
         # 通常時の処理(今まで通り)
         if button_down? Gosu::KbLeft or button_down? Gosu::GpLeft then
@@ -71,7 +122,14 @@ class GameWindow < Gosu::Window
         @player.check_ceiling
         @player.check_wall_x
         @player.move
-        @enemy.move_enemy
+        if @back.get_stagemum != 5
+          @enemy[0].move_enemy
+          @enemy[1].move_enemy
+          @enemy[2].move_enemy
+          check_enemy_collision(0)
+          check_enemy_collision(1)
+          check_enemy_collision(2)
+        end
 
         if @back.get_stagemum==3
           if @player.passed_x?(50*40) && @traped==0
@@ -94,35 +152,57 @@ class GameWindow < Gosu::Window
         end
 
         if @clear.check_clear(@player.get_x - @player.get_back, @player.get_y) && @cleared==0
-          @cleared = 1
-        end
-
-        if @cleared == 1
-          @fleem+=1
-          if @fleem == 40
-            if !@back.change_stage
-              continue
-            end
-            @cleared = 2
-            @fleem = 0
-            @player.warp(20, 240)
-            @player.set_back
-            @clear.reset
-          end
+          @player.clear
         end
       end
     end
     if @scleen_num == 2
-    end
-    if @scleen_num == 3
+      @back.change_sound(@start.get_sound(0))
+      @player.change_sound(@start.get_sound(1))
     end
 
   end
 
+  def enemy_warp
+    if @back.get_stagemum==1
+          @enemy[0].warp(11*50, 7*50-20)
+          @enemy[1].warp(40*50, 7*50-20)
+          @enemy[2].warp(54*50, 7*50-20)
+        elsif @back.get_stagemum==2
+          @enemy[0].warp(8*50, 7*50-20)
+          @enemy[1].warp(18*50, 0*50-20)
+          @enemy[2].warp(45*50, 4*50-20)
+        elsif @back.get_stagemum==3
+          @enemy[0].warp(15*50, 4*50-20)
+          @enemy[1].warp(35*50, 7*50-20)
+          @enemy[2].warp(53*50, 4*50-20)
+        elsif @back.get_stagemum==4
+          @enemy[0].warp(5*50, 3*50-20)
+          @enemy[1].warp(18*50, 7*50-20)
+          @enemy[2].warp(47*50, 7*50-20)
+        end
+  end
+
   def button_down(id)
+    if @scleen_num == 0 || @scleen_num == 2
+      if id == Gosu::KbLeft or id == Gosu::GpLeft
+        @start.change_mode(0, @scleen_num)
+      end
+      if id == Gosu::KbRight or id == Gosu::GpRight
+        @start.change_mode(1, @scleen_num)
+      end
+      if id == Gosu::KbUp
+        @start.change_mode(2, @scleen_num)
+      end
+      if id == Gosu::KbDown
+        @start.change_mode(3, @scleen_num)
+      end
+    end
+
     if @scleen_num == 0
       if id == Gosu::KB_RETURN
         @scleen_num = @start.selected
+        enemy_warp
       end
     elsif @scleen_num == 1
       if id == Gosu::KbUp
@@ -142,16 +222,16 @@ class GameWindow < Gosu::Window
     end
   end
 
-  def check_enemy_collision
-    return unless @enemy.alive?
+  def check_enemy_collision(i)
+    return unless @enemy[i].alive?
 
     px = @player.get_x - @player.get_back
     py = @player.get_y
     pw = Player::CHAR_WIDTH
     ph = Player::CHAR_HEIGHT
 
-    ex = @enemy.get_x
-    ey = @enemy.get_y
+    ex = @enemy[i].get_x
+    ey = @enemy[i].get_y
     ew = Enemy::CHAR_WIDTH
     eh = Enemy::CHAR_HEIGHT
 
@@ -165,14 +245,12 @@ class GameWindow < Gosu::Window
 
     if overlap_y < overlap_x && py < ey && @player.get_vel_y > 0
         # 縦方向の重なりが浅く、プレイヤーが上にいて落下中 → 上から踏んだ
-        @enemy.defeat
+        @enemy[i].defeat
         @player.bounce   # 任意:踏んだ時に少し跳ねさせる
     else
-        # それ以外 → 横からぶつかった → ゲームオーバー扱い
-        @player.warp(20, 240)
-        @player.set_back
+        # それ以外 → 横からぶつかった → 死亡演出を開始
         @player.down_life
-        @outed = 1
+        @player.die
     end
   end
 
@@ -182,7 +260,7 @@ class GameWindow < Gosu::Window
     end
 
     if @scleen_num == 1
-      if @outed == 1 || @cleared == 2
+      if @outed == 1 || @cleared == 1
         @gameover.draw(@player.get_life, @back.get_stagemum)
         @fleem += 1
         if @fleem == 50
@@ -190,11 +268,16 @@ class GameWindow < Gosu::Window
           @cleared = 0
           @fleem = 0
         end
+        @back.start_bgm(@scleen_num)
       else
         @player.draw
         @clear.draw(@player.get_back, 0)
-        #@enemy.draw(@player.get_back, 0)
+        if @back.get_stagemum < 5
+          @enemy[0].draw(@player.get_back, 0)
+          @enemy[1].draw(@player.get_back, 0)
+          @enemy[2].draw(@player.get_back, 0)
         # Drawing code goes here
+        end
       end
     end
     if @scleen_num == 2
