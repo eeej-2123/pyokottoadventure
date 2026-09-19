@@ -159,6 +159,7 @@ class GameWindow < Gosu::Window
     if @scleen_num == 2
       @back.change_sound(@start.get_sound(0))
       @player.change_sound(@start.get_sound(1))
+      @start.change_sound(@start.get_sound(1))
     end
 
   end
@@ -210,7 +211,9 @@ class GameWindow < Gosu::Window
       end
     elsif @scleen_num == 2
       if id == Gosu::KB_RETURN
-        @scleen_num = 0
+        if @start.get_settei == 2
+          @scleen_num = 0
+        end
       end
     elsif @scleen_num == 3
       if id == Gosu::KB_RETURN
